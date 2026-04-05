@@ -34,9 +34,9 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={logo} alt="Mbjare InfoTech" className="h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+            <img src={logo} alt="Mbjare InfoTech" className="h-20 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               style={{ filter: 'drop-shadow(0 0 10px rgba(0,210,200,0.5))' }} />
-            <span className="mono-font text-[9px] text-[#4db6ac]/45 tracking-[0.25em] uppercase hidden sm:block mt-0.5">InfoTech</span>
+            <span className="mono-font text-[9px] text-[#4db6ac]/45 tracking-[0.25em] uppercase hidden sm:block mt-0.5"></span>
           </Link>
 
           {/* Desktop Links */}
@@ -54,7 +54,7 @@ export default function Navbar() {
 
           {/* Right */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/918815223300" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-white/40 hover:text-[#4db6ac] transition-colors duration-300">
               <span className="teal-dot w-1.5 h-1.5" /> Available Now
             </a>
@@ -76,7 +76,7 @@ export default function Navbar() {
         <button onClick={() => setOpen(false)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
           <X size={22} />
         </button>
-        <img src={logo} alt="Mbjare" className="h-16 w-auto object-contain mb-2"
+        <img src={logo} alt="Mbjare" className="h-20 w-auto object-contain mb-2"
           style={{ filter: 'drop-shadow(0 0 16px rgba(0,210,200,0.6))' }} />
         {navLinks.map((link, i) => (
           <Link key={link.path} to={link.path}

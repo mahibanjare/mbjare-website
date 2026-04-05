@@ -87,11 +87,11 @@ export default function Footer() {
             </ul>
 
             <div className="mt-8 space-y-3 text-sm">
-              <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-2 text-white/40 hover:text-[#4db6ac] transition-colors duration-300">
-                <Phone size={13} /> +91 XXXX XXXXXX
+              <a href="tel:+918815223300" className="flex items-center gap-2 text-white/40 hover:text-[#4db6ac] transition-colors duration-300">
+                <Phone size={13} /> +91 8815223300
               </a>
-              <a href="mailto:hello@mbjare.com" className="flex items-center gap-2 text-white/40 hover:text-[#4db6ac] transition-colors duration-300">
-                <Mail size={13} /> hello@mbjare.com
+              <a href="mailto:info@mbjare.com" className="flex items-center gap-2 text-white/40 hover:text-[#4db6ac] transition-colors duration-300">
+                <Mail size={13} /> info@mbjare.com
               </a>
               <div className="flex items-center gap-2 text-white/40">
                 <MapPin size={13} /> Raipur, Chhattisgarh
@@ -104,7 +104,7 @@ export default function Footer() {
             <p className="text-white/40 text-sm leading-relaxed mb-5">
               Want agency updates, automation ideas, or quote alerts? Email us or message on WhatsApp.
             </p>
-            <a href="mailto:hello@mbjare.com" className="btn-primary w-full justify-center text-xs py-3">Email Us</a>
+            <a href="mailto:info@mbjare.com" className="btn-primary w-full justify-center text-xs py-3">Email Us</a>
           </div>
         </div>
 

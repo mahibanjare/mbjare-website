@@ -89,9 +89,9 @@ export default function Contact() {
           {/* ── LEFT INFO CARDS */}
           <div className="lg:col-span-2 space-y-4">
             {[
-              { href: 'https://wa.me/91XXXXXXXXXX', Icon: MessageSquare, color: '#009688', title: 'WhatsApp Us', sub: 'Fastest — usually < 30 min', val: '+91 XXXX XXXXXX' },
-              { href: 'mailto:hello@mbjare.com',    Icon: Mail,           color: '#0891b2', title: 'Email Us',     sub: 'Detailed queries & proposals', val: 'hello@mbjare.com' },
-              { href: 'tel:+91XXXXXXXXXX',          Icon: Phone,          color: '#7c3aed', title: 'Call Us',      sub: 'Mon–Sat, 10am–7pm IST',      val: '+91 XXXX XXXXXX' },
+              { href: 'https://wa.me/918815223300', Icon: MessageSquare, color: '#009688', title: 'WhatsApp Us', sub: 'Fastest — usually < 30 min', val: '+91 8815223300' },
+              { href: 'mailto:info@mbjare.com',    Icon: Mail,           color: '#0891b2', title: 'Email Us',     sub: 'Detailed queries & proposals', val: 'info@mbjare.com' },
+              { href: 'tel:+918815223300',          Icon: Phone,          color: '#7c3aed', title: 'Call Us',      sub: 'Mon–Sat, 10am–7pm IST',      val: '+91 8815223300' },
             ].map(({ href, Icon, color, title, sub, val }) => (
               <a
                 key={title}
@@ -164,7 +164,7 @@ export default function Contact() {
                   We've received your message and will respond within 2 hours. Get ready to build something amazing!
                 </p>
                 <a
-                  href="https://wa.me/91XXXXXXXXXX?text=Hi!%20I%20just%20filled%20your%20contact%20form"
+                  href="https://wa.me/918815223300?text=Hi!%20I%20just%20filled%20your%20contact%20form"
                   target="_blank" rel="noopener noreferrer"
                   className="btn-primary"
                 >
