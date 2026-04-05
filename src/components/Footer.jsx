@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Mail, Phone, MapPin, ArrowRight, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react'
 import logo from '../assets/logo1.png'
+import NewsletterForm from './NewsletterForm'
 
 const services = [
   'Website Development', 'App Development', 'WhatsApp API',
@@ -102,9 +103,9 @@ export default function Footer() {
           <div>
             <h4 className="display-font font-semibold text-white text-sm uppercase tracking-widest mb-6">Stay Connected</h4>
             <p className="text-white/40 text-sm leading-relaxed mb-5">
-              Want agency updates, automation ideas, or quote alerts? Email us or message on WhatsApp.
+              Want agency updates, automation ideas, or quote alerts? Subscribe now!
             </p>
-            <a href="mailto:info@mbjare.com" className="btn-primary w-full justify-center text-xs py-3">Email Us</a>
+            <NewsletterForm />
           </div>
         </div>
 

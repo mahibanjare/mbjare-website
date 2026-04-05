@@ -10,6 +10,7 @@ import Services  from './pages/Services'
 import Portfolio from './pages/Portfolio'
 import About     from './pages/About'
 import Contact   from './pages/Contact'
+import TurnstileTest from './pages/TurnstileTest'
 
 // ── Layout: public pages (with Navbar + Footer) ───────────────────
 function PublicLayout({ children }) {
@@ -47,6 +48,7 @@ function AppRoutes() {
         <Route path="/portfolio" element={<PublicLayout><Portfolio /></PublicLayout>} />
         <Route path="/about"     element={<PublicLayout><About     /></PublicLayout>} />
         <Route path="/contact"   element={<PublicLayout><Contact   /></PublicLayout>} />
+        <Route path="/turnstile-test" element={<TurnstileTest />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

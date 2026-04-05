@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { Mail, Phone, MapPin, MessageSquare, Send, CheckCircle, Zap, Clock, ArrowRight } from 'lucide-react'
+import TurnstileWidget from '../components/TurnstileWidget'
+import { submitForm } from '../utils/formSubmit'
 
 const services = [
   'Website Development', 'Mobile App Development', 'WhatsApp API / Bot',
@@ -23,47 +25,89 @@ const faqs = [
 ]
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', budget: '', message: '' })
+  const [form, setForm] = useState({ 
+    name: '', 
+    email: '', 
+    phone: '', 
+    businessName: '',
+    businessAddress: '',
+    service: '', 
+    budget: '', 
+    message: '' 
+  })
+  const [turnstileToken, setTurnstileToken] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [sent, setSent]       = useState(false)
+  const [sent, setSent] = useState(false)
   const [openFaq, setOpenFaq] = useState(null)
+  const turnstileRef = useRef(null)
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value })
 
-  const openEmailClient = (values) => {
-    const subject = `Project inquiry from ${values.name}`
-    const body = [
-      `Name: ${values.name}`,
-      `Email: ${values.email}`,
-      values.phone && `Phone: ${values.phone}`,
-      values.service && `Service: ${values.service}`,
-      values.budget && `Budget: ${values.budget}`,
-      '',
-      'Message:',
-      values.message,
-    ].filter(Boolean).join('\n')
-
-    window.location.href = `mailto:hello@mbjare.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  }
-
   const onSubmit = async e => {
     e.preventDefault()
+    
+    // Validation
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       toast.error('Please fill in all required fields')
       return
     }
+
+    if (!turnstileToken) {
+      toast.error('Please complete the Turnstile verification')
+      return
+    }
+
     setLoading(true)
     try {
-      openEmailClient(form)
+      // Prepare form data with exact column names
+      const formData = {
+        Name: form.name.trim(),
+        Email: form.email.trim(),
+        Phone: form.phone.trim(),
+        'Business Name': form.businessName.trim(),
+        'Business Address': form.businessAddress.trim(),
+        Service: form.service || 'Not specified',
+        Budget: form.budget || 'Not specified',
+        Message: form.message.trim()
+      }
+
+      // Submit to API
+      const result = await submitForm(formData, turnstileToken, 'contact')
+
+      // Success
       setSent(true)
-      toast.success("Message prepared! Your email client should open next.")
-      setForm({ name: '', email: '', phone: '', service: '', budget: '', message: '' })
+      toast.success('Message sent successfully! We will respond within 2 hours.')
+      
+      // Reset form
+      setForm({ name: '', email: '', phone: '', businessName: '', businessAddress: '', service: '', budget: '', message: '' })
+      setTurnstileToken(null)
+
     } catch (err) {
       console.error('Contact form error:', err)
-      toast.error('Could not open email client. Please contact us directly via WhatsApp or email.')
+      toast.error(err.message || 'Failed to send message. Please try again.')
+      
+      // Reset Turnstile on error
+      if (turnstileRef.current) {
+        turnstileRef.current.reset()
+        setTurnstileToken(null)
+      }
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleTurnstileVerify = (token) => {
+    setTurnstileToken(token)
+  }
+
+  const handleTurnstileError = () => {
+    toast.error('Turnstile verification failed. Please try again.')
+    setTurnstileToken(null)
+  }
+
+  const handleTurnstileExpire = () => {
+    toast.error('Verification expired. Please verify again.')
+    setTurnstileToken(null)
   }
 
   return (
@@ -209,6 +253,17 @@ export default function Contact() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-white/40 text-[10px] mb-2 mono-font uppercase tracking-widest">Business Name</label>
+                    <input name="businessName" value={form.businessName} onChange={onChange} placeholder="Your Business / Company" className="input-dark" />
+                  </div>
+                  <div>
+                    <label className="block text-white/40 text-[10px] mb-2 mono-font uppercase tracking-widest">Business Address</label>
+                    <input name="businessAddress" value={form.businessAddress} onChange={onChange} placeholder="City/Location" className="input-dark" />
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-white/40 text-[10px] mb-2 mono-font uppercase tracking-widest">Service Needed</label>
                   <select name="service" value={form.service} onChange={onChange} className="input-dark appearance-none">
@@ -223,6 +278,15 @@ export default function Contact() {
                     name="message" value={form.message} onChange={onChange}
                     placeholder="Describe your project, goals, deadline, and any specific requirements..."
                     rows={5} className="input-dark resize-none" required
+                  />
+                </div>
+
+                <div className="flex justify-center">
+                  <TurnstileWidget 
+                    ref={turnstileRef}
+                    onVerify={handleTurnstileVerify}
+                    onError={handleTurnstileError}
+                    onExpire={handleTurnstileExpire}
                   />
                 </div>
 
