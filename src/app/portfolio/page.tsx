@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Portfolio — Real Client Work',
   description:
     'Live client websites, brand identities and ad campaigns: SR Petrochemicals, BPS Godhi, Ankita Beauty Salon, Grafiya and more.',
+  alternates: { canonical: '/portfolio' },
 }
 
 export default function PortfolioPage() {

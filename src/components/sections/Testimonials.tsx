@@ -1,19 +1,36 @@
-import { Star } from 'lucide-react'
+import { Star, Quote } from 'lucide-react'
 import { testimonials } from '@/content/testimonials'
 import { FadeUp } from '@/components/motion'
 
+function initials(name: string) {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+}
+
 function Card({ t }: { t: (typeof testimonials)[number] }) {
   return (
-    <div className="glass-card p-6 w-[340px] flex-shrink-0">
+    <div className="glass-card p-6 w-[340px] flex-shrink-0 relative group">
+      <Quote
+        size={40}
+        className="absolute top-5 right-5 text-accent/15 group-hover:text-accent/30 transition-colors"
+        aria-hidden
+      />
       <div className="flex gap-1 mb-4">
         {Array.from({ length: t.rating }).map((_, i) => (
           <Star key={i} size={13} className="fill-accent-2 text-accent-2" />
         ))}
       </div>
-      <p className="text-fg/60 text-sm leading-relaxed mb-5">&ldquo;{t.msg}&rdquo;</p>
-      <div>
-        <div className="text-fg text-sm font-semibold">{t.name}</div>
-        <div className="mono-font text-[10px] uppercase tracking-widest text-fg/30 mt-0.5">{t.role}</div>
+      <p className="text-fg/60 text-sm leading-relaxed mb-6">&ldquo;{t.msg}&rdquo;</p>
+      <div className="flex items-center gap-3 pt-4 border-t border-fg/[0.06]">
+        <span className="avatar-ring w-10 h-10 text-xs shrink-0">{initials(t.name)}</span>
+        <div>
+          <div className="text-fg text-sm font-semibold">{t.name}</div>
+          <div className="mono-font text-[10px] uppercase tracking-widest text-fg/30 mt-0.5">{t.role}</div>
+        </div>
       </div>
     </div>
   )

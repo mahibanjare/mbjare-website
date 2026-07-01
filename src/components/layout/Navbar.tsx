@@ -12,6 +12,7 @@ const navLinks = [
   { label: 'Services', path: '/services' },
   { label: 'Portfolio', path: '/portfolio' },
   { label: 'About', path: '/about' },
+  { label: 'FAQ', path: '/faq' },
 ]
 
 export default function Navbar() {
@@ -45,7 +46,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               alt="Mbjare InfoTech"
               width={80}
               height={80}
@@ -102,7 +103,7 @@ export default function Navbar() {
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <Image src="/logo.png" alt="Mbjare" width={88} height={88} className="logo-glow mb-2" />
+        <Image src="/logo.svg" alt="Mbjare" width={88} height={88} className="logo-glow mb-2" />
         {navLinks.map((link, i) => (
           <Link
             key={link.path}

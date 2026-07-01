@@ -3,7 +3,9 @@ import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { MotionProvider } from '@/components/motion'
+import ScrollProgress from '@/components/ui/ScrollProgress'
 import { site } from '@/content/site'
+import { graph, organizationSchema, websiteSchema } from '@/lib/seo'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -36,6 +38,7 @@ export const metadata: Metadata = {
     'AI agency India', 'IT company Raipur', 'website development', 'AI chatbot development',
     'app development', 'WhatsApp automation', 'Google Sheet automation', 'digital marketing', 'Mbjare',
   ],
+  alternates: { canonical: '/' },
   openGraph: {
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
@@ -49,25 +52,15 @@ export const metadata: Metadata = {
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
   icons: { icon: '/logo.png' },
 }
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: site.name,
-  url: site.url,
-  email: site.email,
-  telephone: site.phone,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Raipur',
-    addressRegion: 'Chhattisgarh',
-    addressCountry: 'IN',
-  },
-  sameAs: site.socials.map((s) => s.href),
-}
+const jsonLd = graph(organizationSchema, websiteSchema)
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -83,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <MotionProvider>
+          <ScrollProgress />
           <Navbar />
           <main className="relative">{children}</main>
           <Footer />

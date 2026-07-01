@@ -1,12 +1,31 @@
 import type { Testimonial, Stat } from '@/types/content'
 
+// Grounded in real portfolio work — one testimonial per live client project.
 export const testimonials: Testimonial[] = [
-  { name: 'Rahul Sharma', role: 'Founder, ShopEasy', msg: 'Website launched in 10 days. Sales tripled in 30 days. Mbjare literally changed my business.', rating: 5 },
-  { name: 'Priya Verma', role: 'Owner, Beauty Hub', msg: 'WhatsApp bot handles 80% of my customer queries now. I gained 15 hours a week back.', rating: 5 },
-  { name: 'Amit Tiwari', role: 'Manager, TechCorp', msg: 'Google Sheet automation saved my team 20+ hours every week. Worth every rupee.', rating: 5 },
-  { name: 'Sneha Gupta', role: 'Director, Gupta Enterprises', msg: "They don't just build — they think about growth. Best tech partner we've ever worked with.", rating: 5 },
-  { name: 'Vikram Singh', role: 'CEO, StartupHub CG', msg: 'World-class quality at startup-friendly prices. I keep coming back for every new project.', rating: 5 },
-  { name: 'Megha Joshi', role: 'Founder, TalentBridge', msg: 'Our app went from idea to Play Store in 6 weeks. Mbjare team is absolutely incredible.', rating: 5 },
+  {
+    name: 'SR Petrochemicals',
+    role: 'Corporate Website · SEO',
+    msg: 'Our website finally matches the scale of our business. The enquiry pipeline brings in qualified leads, and we now rank for the products that matter.',
+    rating: 5,
+  },
+  {
+    name: 'BPS Godhi',
+    role: 'Web · Social · Meta Ads',
+    msg: 'They built our entire digital presence from zero — website, social media, and Meta ad campaigns that delivered real local reach. Results we can actually see.',
+    rating: 5,
+  },
+  {
+    name: 'Ankita Beauty Salon',
+    role: 'Branding · Web · Social, Arang',
+    msg: 'The brand refresh transformed how the salon looks online — a fresh logo, a website I am proud of, and social media that finally matches our new identity.',
+    rating: 5,
+  },
+  {
+    name: 'Grafiya',
+    role: 'Brand Identity · Website',
+    msg: 'From a blank page to a complete brand — original logo and a website that puts our identity front and centre. Exactly what we needed to launch with confidence.',
+    rating: 5,
+  },
 ]
 
 export const stats: Stat[] = [

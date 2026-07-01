@@ -21,13 +21,13 @@ export default function Hero() {
       <div className="orb orb-2" aria-hidden />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-32 pb-24">
-        <div className="section-tag mx-auto w-fit mb-8 anim-rise">
+        <div className="section-tag badge-glow mx-auto w-fit mb-8 anim-rise">
           <span className="teal-dot w-1.5 h-1.5" /> India&apos;s AI-First Digital Agency
         </div>
 
         <h1 className="display-font text-[clamp(2.8rem,7.5vw,86px)] font-bold leading-[1.04] mb-7 anim-rise anim-d1">
           <span className="text-fg">We Build </span>
-          <span className="text-gradient">AI-Powered</span>
+          <span className="text-gradient-anim">AI-Powered</span>
           <br />
           <span className="text-outline">Digital Engines</span>
           <br />
@@ -44,7 +44,7 @@ export default function Hero() {
           {chips.map((c) => (
             <span
               key={c.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-fg/10 bg-fg/[0.03] text-fg/55 text-xs font-medium"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-fg/10 bg-fg/[0.03] text-fg/55 text-xs font-medium transition-all duration-300 hover:border-accent/40 hover:bg-accent-soft hover:text-fg hover:-translate-y-0.5"
             >
               <c.icon size={12} className="text-accent-2" /> {c.label}
             </span>

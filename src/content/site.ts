@@ -1,6 +1,6 @@
 export const site = {
   name: 'Mbjare InfoTech',
-  tagline: 'Build. Automate. Dominate.',
+  tagline: 'Build. Automate. Grow.',
   description:
     "India's AI-first digital agency. World-class websites, apps, AI chatbots, WhatsApp automation & growth systems that work while you sleep.",
   url: 'https://mbjare.com',
@@ -47,4 +47,9 @@ export const faqs = [
   { q: 'What happens after the project is done?', a: '30 days of free post-launch support is included. After that, affordable monthly maintenance packages available.' },
   { q: 'Do you work with clients outside Raipur?', a: 'Absolutely — we work Pan-India. Everything managed remotely via WhatsApp, Zoom, and email.' },
   { q: 'Can I see examples before committing?', a: 'Yes! Our Portfolio page has live client websites, and we share more relevant examples on the discovery call.' },
+  { q: 'Where is Mbjare InfoTech located?', a: 'We are based in Raipur, Chhattisgarh, India, and work with clients Pan-India remotely via WhatsApp, Zoom and email.' },
+  { q: 'What services does Mbjare InfoTech offer?', a: 'AI chatbots & agents, AI workflow automation, website development, app development, WhatsApp automation, Google Sheet automation, social media management, branding & logo design, Meta ads, Google Business setup, email automation, and data dashboards.' },
+  { q: 'How much does a website cost?', a: 'Website development starts at ₹9,999. WhatsApp automation from ₹4,999, Google Sheet automation from ₹2,999, and apps from ₹24,999. Every quote is confirmed in writing before we start.' },
+  { q: 'What is an AI chatbot and how can it help my business?', a: 'An AI chatbot is a custom assistant trained on your business that answers customers, qualifies leads and books appointments 24/7 on your website and WhatsApp — in both Hindi and English. It works while you sleep so you never miss an enquiry.' },
+  { q: 'Do you build WhatsApp automation for small businesses?', a: 'Yes. We set up the WhatsApp Business API with automated chatbot flows, broadcast campaigns, lead capture and Google Sheet sync — starting at ₹4,999, usually live in 3–5 days.' },
 ]

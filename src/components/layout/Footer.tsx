@@ -14,7 +14,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-4">
             <div className="flex items-center mb-4">
-              <Image src="/logo-footer.png" alt="Mbjare InfoTech" width={88} height={64} className="logo-glow" />
+              <Image src="/logo1.svg" alt="Mbjare InfoTech" width={88} height={64} className="logo-glow" />
             </div>
             <p className="text-fg/40 text-sm leading-relaxed mb-6 max-w-xs">
               {site.description}
@@ -83,7 +83,12 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-fg/45">
           <span>© {new Date().getFullYear()} {site.name}. All rights reserved.</span>
-          <span className="mono-font uppercase tracking-widest">Build. Automate. Dominate.</span>
+          <div className="flex items-center gap-5">
+            <Link href="/about" className="hover:text-accent-2 transition-colors">About</Link>
+            <Link href="/faq" className="hover:text-accent-2 transition-colors">FAQ</Link>
+            <Link href="/contact" className="hover:text-accent-2 transition-colors">Contact</Link>
+          </div>
+          <span className="mono-font uppercase tracking-widest">Build. Automate. Grow.</span>
         </div>
       </div>
     </footer>

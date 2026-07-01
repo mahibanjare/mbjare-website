@@ -1,4 +1,5 @@
 import { FadeUp, Stagger } from '@/components/motion'
+import { SpotlightDiv } from '@/components/ui/Spotlight'
 
 const steps = [
   { n: '01', title: 'Discover', desc: 'Free strategy call. We understand your business, goals, and where AI + automation can multiply results.' },
@@ -18,14 +19,30 @@ export default function Process() {
           </h2>
         </FadeUp>
 
+        {/* Timeline rail with glowing nodes (large screens) */}
+        <div className="relative hidden lg:block mb-8">
+          <div className="absolute top-[6px] left-[12.5%] right-[12.5%] h-px process-rail" />
+          <div className="grid grid-cols-4">
+            {steps.map((s) => (
+              <div key={s.n} className="flex justify-center">
+                <span className="process-node" />
+              </div>
+            ))}
+          </div>
+        </div>
+
         <Stagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {steps.map((s, i) => (
             <FadeUp key={s.n} index={i}>
-              <div className="glass-card p-7 h-full">
-                <div className="display-font text-5xl font-bold text-outline mb-6">{s.n}</div>
-                <h3 className="display-font text-lg font-semibold text-fg mb-3">{s.title}</h3>
+              <SpotlightDiv className="glass-card spotlight-card p-7 h-full group transition-transform duration-300">
+                <div className="display-font text-5xl font-bold text-gradient mb-6 transition-transform duration-300 group-hover:-translate-y-0.5">
+                  {s.n}
+                </div>
+                <h3 className="display-font text-lg font-semibold text-fg mb-3 transition-colors group-hover:text-accent-2">
+                  {s.title}
+                </h3>
                 <p className="text-fg/40 text-sm leading-relaxed">{s.desc}</p>
-              </div>
+              </SpotlightDiv>
             </FadeUp>
           ))}
         </Stagger>

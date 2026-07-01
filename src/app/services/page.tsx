@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Services — AI, Web, Apps & Automation',
   description:
     'AI chatbots, websites, apps, WhatsApp automation, branding, Meta ads and more. Future-proof digital services with transparent pricing.',
+  alternates: { canonical: '/services' },
 }
 
 export default function ServicesPage() {

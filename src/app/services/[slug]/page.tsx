@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CheckCircle2, ArrowRight, Clock, IndianRupee } from 'lucide-react'
 import { services, getService } from '@/content/services'
-import { site } from '@/content/site'
+import { breadcrumbSchema, graph, serviceSchema } from '@/lib/seo'
 import CTA from '@/components/sections/CTA'
 import Icon from '@/components/ui/Icon'
 import { FadeUp } from '@/components/motion'
@@ -23,6 +23,7 @@ export async function generateMetadata({
   return {
     title: `${service.title} — ${service.price}`,
     description: service.desc,
+    alternates: { canonical: `/services/${slug}` },
   }
 }
 
@@ -35,14 +36,14 @@ export default async function ServicePage({
   const service = getService(slug)
   if (!service) notFound()
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: service.title,
-    description: service.desc,
-    provider: { '@type': 'Organization', name: site.name, url: site.url },
-    areaServed: 'IN',
-  }
+  const jsonLd = graph(
+    serviceSchema(service),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Services', path: '/services' },
+      { name: service.title, path: `/services/${service.slug}` },
+    ]),
+  )
 
   return (
     <>
@@ -68,7 +69,15 @@ export default async function ServicePage({
               {service.title}
             </h1>
             <p className="display-font text-xl text-fg/55 mb-6">{service.subtitle}</p>
-            <p className="text-fg/45 text-lg max-w-2xl leading-relaxed mb-10">{service.desc}</p>
+            <p className="text-fg/45 text-lg max-w-2xl leading-relaxed mb-6">{service.desc}</p>
+
+            {/* Answer-first summary — one extractable sentence with the key
+                facts (what, who, where, price, speed) for AI answer engines. */}
+            <p className="text-fg/70 text-base max-w-2xl leading-relaxed mb-10 border-l-2 border-accent-2 pl-4">
+              <strong className="text-fg font-semibold">In short:</strong> Mbjare InfoTech provides{' '}
+              {service.title.toLowerCase()} for small and medium businesses across Chhattisgarh and
+              across India, with pricing at {service.price} and typical delivery in {service.timeline}.
+            </p>
 
             <div className="flex flex-wrap gap-4 mb-10">
               <div className="glass-card px-5 py-3 flex items-center gap-2.5 text-sm">

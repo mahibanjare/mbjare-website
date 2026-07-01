@@ -11,7 +11,7 @@ export default function CTA() {
         <FadeUp>
           <h2 className="display-font text-[clamp(2.2rem,5.5vw,60px)] font-bold leading-tight mb-6">
             <span className="text-fg">Ready to </span>
-            <span className="text-gradient">automate &amp; dominate</span>
+            <span className="text-gradient">automate &amp; grow</span>
             <span className="text-fg">?</span>
           </h2>
           <p className="text-fg/45 text-lg mb-10 max-w-xl mx-auto">

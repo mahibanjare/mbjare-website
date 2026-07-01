@@ -8,7 +8,8 @@ import { FadeUp, Stagger } from '@/components/motion'
 export const metadata: Metadata = {
   title: 'About — The AI-First Team Behind Mbjare',
   description:
-    'We are a Raipur-based AI-first digital agency helping Indian businesses build, automate and dominate online.',
+    'We are a Raipur-based AI-first digital agency helping Indian businesses build, automate and grow online.',
+  alternates: { canonical: '/about' },
 }
 
 export default function AboutPage() {

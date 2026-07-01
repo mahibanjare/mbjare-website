@@ -24,9 +24,9 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
   }, [inView, value])
 
   return (
-    <span ref={ref} className="display-font text-5xl md:text-6xl font-bold text-fg">
+    <span ref={ref} className="display-font text-5xl md:text-6xl font-bold text-gradient">
       {n}
-      <span className="text-fg/40">{suffix}</span>
+      <span className="text-accent-2">{suffix}</span>
     </span>
   )
 }
@@ -34,9 +34,9 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 export default function StatsSection() {
   return (
     <section className="py-20 border-y border-fg/[0.06]">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-y-12 lg:gap-y-0">
         {stats.map((s) => (
-          <div key={s.label} className="text-center">
+          <div key={s.label} className="stat-cell relative text-center px-4">
             <Counter value={s.value} suffix={s.suffix} />
             <div className="mono-font text-[10px] uppercase tracking-[0.25em] text-fg/35 mt-3">
               {s.label}

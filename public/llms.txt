@@ -1,0 +1,37 @@
+# Mbjare InfoTech
+
+> India's AI-first digital agency based in Raipur, Chhattisgarh. We build websites, mobile apps, AI chatbots, and business automation systems for Indian small and medium businesses. Tagline: Build. Automate. Grow.
+
+## About
+
+Mbjare InfoTech was founded in 2025 in Raipur, Chhattisgarh, India. We are an AI-first digital agency that has shipped 50+ projects for clients across India, generating ₹10L+ in client revenue. We serve businesses Pan-India, managed remotely via WhatsApp, Zoom, and email. Typical delivery: most websites in 1–2 weeks, automations in 3–5 days, apps in 4–6 weeks. We reply to enquiries within 2 hours and include 30 days of free post-launch support.
+
+## Services and pricing
+
+- AI Chatbots & Agents — custom AI trained on your business, for website + WhatsApp, with lead qualification and appointment booking. Multilingual (Hindi + English). Price: custom (free consult). Timeline: 1–2 weeks.
+- AI Workflow Automation — connect Sheets, WhatsApp, email and CRM with AI (n8n / Make / custom). Price: custom (free consult). Timeline: 1–2 weeks.
+- Website Development — Next.js, React, WordPress. SEO-optimized, Core Web Vitals 95+ Lighthouse. Price: starting ₹9,999. Timeline: 1–2 weeks.
+- App Development — React Native / Flutter, iOS + Android. Price: starting ₹24,999. Timeline: 4–6 weeks.
+- WhatsApp Automation — WhatsApp Business API, chatbot flows, broadcasts, lead capture. Price: starting ₹4,999. Timeline: 3–5 days.
+- Google Sheet Automation — Apps Script, form → sheet → WhatsApp pipelines. Price: starting ₹2,999. Timeline: 2–4 days.
+- Social Media Management — content, reels, growth. Price: starting ₹5,999/mo.
+- Branding & Logo Design — logos, brand kits, UI/UX. Price: starting ₹1,999. Timeline: 3–5 days.
+- Meta Ads & Performance Marketing — Facebook & Instagram campaigns. Price: starting ₹4,999/mo + ad spend.
+- Google Business Setup — Google Business Profile + local SEO. Price: starting ₹1,499. Timeline: 1–2 days.
+- Email Automation — drip sequences, newsletters. Price: starting ₹3,999. Timeline: 3–5 days.
+- Data & Dashboards — Looker Studio, real-time reporting. Price: starting ₹3,499. Timeline: 3–7 days.
+
+## Contact
+
+- Website: https://mbjare.com
+- Phone / WhatsApp: +91 8815223300
+- Email: info@mbjare.com
+- Location: Raipur, Chhattisgarh, India
+- Hours: Mon–Sat, 10am–7pm IST
+
+## Common questions
+
+- How fast do you deliver? Most websites: 1–2 weeks. Automations: 3–5 days. Apps: 4–6 weeks.
+- Do you offer installments? Yes — typically 50% upfront, 50% on delivery.
+- Do you work outside Raipur? Yes, Pan-India, fully remote.
+- What happens after launch? 30 days free support, then affordable monthly maintenance.

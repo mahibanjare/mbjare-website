@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { MessageSquare, Mail, Phone, MapPin, Clock } from 'lucide-react'
+import Link from 'next/link'
+import { MessageSquare, Mail, Phone, MapPin, Clock, ArrowRight } from 'lucide-react'
 import ContactForm from '@/components/forms/ContactForm'
 import { site, faqs } from '@/content/site'
 import { FadeUp } from '@/components/motion'
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Contact — Get Your Free Quote',
   description:
     'Free strategy call for websites, AI chatbots, apps and automation. We reply within 2 hours — WhatsApp, email or the form.',
+  alternates: { canonical: '/contact' },
 }
 
 const channels = [
@@ -100,7 +102,7 @@ export default function ContactPage() {
             </h2>
           </FadeUp>
           <div className="space-y-3">
-            {faqs.map((f, i) => (
+            {faqs.slice(0, 5).map((f, i) => (
               <FadeUp key={f.q} index={i}>
                 <details className="glass-card group">
                   <summary className="p-5 cursor-pointer list-none flex items-center justify-between text-fg font-medium text-sm">
@@ -111,6 +113,11 @@ export default function ContactPage() {
                 </details>
               </FadeUp>
             ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/faq" className="btn-ghost text-sm">
+              See all FAQs <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
