@@ -64,15 +64,15 @@ export default function Hero() {
         {/* Trust strip — real clients, live on the internet */}
         <div className="mt-16 anim-rise anim-d4">
           <div className="mono-font text-[10px] uppercase tracking-[0.35em] text-fg/30 mb-5">
-            Trusted by real businesses
+            Brands we&apos;ve built — live on the internet
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             {trustedBy.map((name) => (
               <span
                 key={name}
-                className="display-font text-sm font-semibold text-fg/35 hover:text-accent-2 transition-colors"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-fg/10 bg-fg/[0.02] display-font text-sm font-semibold text-fg/45 transition-all duration-300 hover:text-fg hover:border-accent/40 hover:bg-accent-soft hover:-translate-y-0.5"
               >
-                {name}
+                <span className="teal-dot w-1.5 h-1.5" /> {name}
               </span>
             ))}
           </div>

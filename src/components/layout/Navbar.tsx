@@ -37,19 +37,21 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'py-2 nav-blur backdrop-blur-2xl border-b border-fg/[0.07]'
-            : 'py-4 bg-transparent'
+        className={`fixed left-0 right-0 z-50 px-4 transition-all duration-500 ${
+          scrolled ? 'top-2.5' : 'top-4'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div
+          className={`nav-pill max-w-6xl mx-auto flex items-center justify-between pl-5 pr-2.5 transition-all duration-500 ${
+            scrolled ? 'py-1.5' : 'py-2'
+          }`}
+        >
           <Link href="/" className="flex items-center gap-2.5 group">
             <Image
               src="/logo.svg"
               alt="Mbjare InfoTech"
-              width={80}
-              height={80}
+              width={64}
+              height={64}
               priority
               className="logo-glow transition-transform duration-300 group-hover:scale-105"
             />
@@ -60,9 +62,9 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 href={link.path}
-                className={`relative px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                   pathname === link.path
-                    ? 'text-accent-2 bg-[rgba(0,150,136,0.10)] border border-[rgba(0,150,136,0.25)]'
+                    ? 'text-accent-2 bg-accent-soft border border-accent/25'
                     : 'text-fg/50 hover:text-fg hover:bg-fg/[0.05]'
                 }`}
               >

@@ -13,8 +13,8 @@ export default function CTA() {
   return (
     <section className="py-28 relative overflow-hidden">
       <div className="hero-glow absolute inset-0" />
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <FadeUp>
+      <div className="relative max-w-5xl mx-auto px-6">
+        <FadeUp className="panel-premium px-6 py-16 sm:px-16 sm:py-20 text-center">
           <div className="section-tag badge-glow mx-auto w-fit mb-6">
             <span className="teal-dot w-1.5 h-1.5" /> Only a few project slots open this month
           </div>

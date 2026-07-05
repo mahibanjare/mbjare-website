@@ -37,7 +37,7 @@ export default function WhyUs() {
     <section className="py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <FadeUp className="text-center max-w-2xl mx-auto mb-16">
-          <div className="section-tag mb-5 mx-auto w-fit">Why Mbjare</div>
+          <div className="section-tag mb-5 mx-auto w-fit"><span className="text-fg/35">02</span> Why Mbjare</div>
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             Why real businesses <span className="text-outline">choose us</span> — and stay
           </h2>

@@ -41,7 +41,7 @@ export default function Testimonials() {
     <section className="py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-12">
         <FadeUp>
-          <div className="section-tag mb-5">Client Love</div>
+          <div className="section-tag mb-5"><span className="text-fg/35">04</span> Client Love</div>
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             Trusted by businesses <span className="text-outline">like yours</span>
           </h2>

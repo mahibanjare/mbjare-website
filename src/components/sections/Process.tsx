@@ -13,7 +13,7 @@ export default function Process() {
     <section className="py-24">
       <div className="max-w-7xl mx-auto px-6">
         <FadeUp className="mb-14">
-          <div className="section-tag mb-5">How We Work</div>
+          <div className="section-tag mb-5"><span className="text-fg/35">03</span> How We Work</div>
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             From idea to <span className="text-outline">impact</span> — in weeks
           </h2>
