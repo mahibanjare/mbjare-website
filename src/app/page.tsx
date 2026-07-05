@@ -8,6 +8,7 @@ import Process from '@/components/sections/Process'
 import Testimonials from '@/components/sections/Testimonials'
 import FounderNote from '@/components/sections/FounderNote'
 import CTA from '@/components/sections/CTA'
+import Scene3D from '@/components/three/Scene3D'
 import { FadeUp } from '@/components/motion'
 
 const marqueeItems = [
@@ -18,6 +19,7 @@ const marqueeItems = [
 export default function HomePage() {
   return (
     <>
+      <Scene3D />
       <Hero />
 
       {/* Marquee strip */}
