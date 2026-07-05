@@ -4,6 +4,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { MotionProvider } from '@/components/motion'
 import ScrollProgress from '@/components/ui/ScrollProgress'
+import WhatsAppFloat from '@/components/ui/WhatsAppFloat'
 import { site } from '@/content/site'
 import { graph, organizationSchema, websiteSchema } from '@/lib/seo'
 import './globals.css'
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main className="relative">{children}</main>
           <Footer />
+          <WhatsAppFloat />
         </MotionProvider>
       </body>
     </html>

@@ -45,6 +45,21 @@ export default function Testimonials() {
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             Trusted by businesses <span className="text-outline">like yours</span>
           </h2>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-6">
+            <div className="flex items-center gap-2">
+              <div className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={16} className="fill-accent-2 text-accent-2" />
+                ))}
+              </div>
+              <span className="text-fg font-semibold text-sm">5.0</span>
+              <span className="text-fg/40 text-sm">from every client we&apos;ve worked with</span>
+            </div>
+            <span className="hidden sm:block w-px h-4 bg-fg/15" />
+            <span className="text-fg/40 text-sm">
+              <span className="text-fg font-semibold">100%</span> would recommend Mbjare
+            </span>
+          </div>
         </FadeUp>
       </div>
 

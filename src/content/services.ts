@@ -7,6 +7,7 @@ export const services: Service[] = [
     title: 'AI Chatbots & Agents',
     subtitle: 'Your 24/7 AI Employee.',
     desc: 'Custom AI assistants trained on your business — answering customers, qualifying leads, and booking appointments on your website and WhatsApp, around the clock.',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&q=80&auto=format&fit=crop',
     features: [
       'Custom AI trained on your business data',
       'Website + WhatsApp AI chat',
@@ -25,6 +26,7 @@ export const services: Service[] = [
     title: 'AI Workflow Automation',
     subtitle: 'If You Do It Twice, AI Does It Forever.',
     desc: 'Connect your tools — Sheets, WhatsApp, email, CRM — with AI in the middle. Auto-draft replies, summarize enquiries, generate reports, route leads. Zero clicks.',
+    image: 'https://images.unsplash.com/photo-1633419461186-7d40a38105ec?w=900&q=80&auto=format&fit=crop',
     features: [
       'AI-powered pipelines (n8n / Make / custom)',
       'Auto-draft email & WhatsApp replies',
@@ -43,6 +45,7 @@ export const services: Service[] = [
     title: 'Website Development',
     subtitle: 'Beautiful. Fast. Converting.',
     desc: 'Custom websites with Next.js, React and WordPress — blazing fast, SEO-optimized, and built to convert visitors into customers. Mobile-first, always.',
+    image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&q=80&auto=format&fit=crop',
     features: [
       'Custom Next.js / React / WordPress',
       'Mobile-first responsive design',
@@ -61,6 +64,7 @@ export const services: Service[] = [
     title: 'App Development',
     subtitle: 'iOS & Android. One Codebase.',
     desc: 'Cross-platform apps with React Native and Flutter. From MVP to full product — we ship apps users genuinely enjoy using.',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=900&q=80&auto=format&fit=crop',
     features: [
       'React Native / Flutter',
       'iOS & Android deployment',
@@ -78,6 +82,7 @@ export const services: Service[] = [
     title: 'WhatsApp Automation',
     subtitle: 'Automate. Engage. Convert.',
     desc: 'Integrate WhatsApp Business API to automate support, send order updates, qualify leads, and run campaigns — all on autopilot.',
+    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=900&q=80&auto=format&fit=crop',
     features: [
       'WhatsApp Business API setup',
       'Automated chatbot flows',
@@ -95,6 +100,7 @@ export const services: Service[] = [
     title: 'Google Sheet Automation',
     subtitle: 'Kill Manual Work. Forever.',
     desc: 'Eliminate manual data entry forever. Custom Apps Script automations that connect your sheets to WhatsApp, email, forms and any API.',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&auto=format&fit=crop',
     features: [
       'Custom Apps Script development',
       'Auto-reports & dashboards',
@@ -112,6 +118,7 @@ export const services: Service[] = [
     title: 'Social Media Management',
     subtitle: 'Grow Your Audience. Daily.',
     desc: 'Content, creatives & profile optimization that grow your brand on Instagram, Facebook & LinkedIn — proven with real local businesses.',
+    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=900&q=80&auto=format&fit=crop',
     features: [
       'Content calendar & posting',
       'Reels & creative design',
@@ -129,6 +136,7 @@ export const services: Service[] = [
     title: 'Branding & Logo Design',
     subtitle: 'Look Like a Million Bucks.',
     desc: 'Logos, brand kits, UI/UX & marketing assets that make you look like a ₹1Cr company. We rebuilt Ankita Beauty Salon and built Grafiya from scratch.',
+    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=900&q=80&auto=format&fit=crop',
     features: [
       'Logo design & rebuilds',
       'Complete brand kits',
@@ -146,6 +154,7 @@ export const services: Service[] = [
     title: 'Meta Ads & Performance Marketing',
     subtitle: 'Paid Reach. Real Results.',
     desc: 'Facebook & Instagram ad campaigns engineered for leads and sales — strategy, creatives, targeting and weekly optimization.',
+    image: 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=900&q=80&auto=format&fit=crop',
     features: [
       'Campaign strategy & setup',
       'Ad creative design',
@@ -163,6 +172,7 @@ export const services: Service[] = [
     title: 'Google Business Setup',
     subtitle: 'Dominate Local Search.',
     desc: 'Show up first when customers search for your service nearby. Complete Google Business Profile setup and local SEO.',
+    image: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=900&q=80&auto=format&fit=crop',
     features: [
       'Profile creation & verification',
       'Photos, services & posts setup',
@@ -180,6 +190,7 @@ export const services: Service[] = [
     title: 'Email Automation',
     subtitle: 'Nurture Leads While You Sleep.',
     desc: 'Drip sequences that nurture leads and close deals on autopilot — welcome flows, follow-ups, and campaigns.',
+    image: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=900&q=80&auto=format&fit=crop',
     features: [
       'Drip sequence design',
       'Welcome & follow-up flows',
@@ -197,6 +208,7 @@ export const services: Service[] = [
     title: 'Data & Dashboards',
     subtitle: 'Your Data. Your Power.',
     desc: 'Clean pipelines, smart dashboards, and real-time reports for data-driven decisions — built on Sheets, Looker Studio or custom.',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop',
     features: [
       'Data cleaning & pipelines',
       'Looker Studio dashboards',

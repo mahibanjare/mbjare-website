@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CheckCircle2, ArrowRight, Clock, IndianRupee } from 'lucide-react'
@@ -55,15 +56,28 @@ export default async function ServicePage({
       <section className="pt-40 pb-20 hero-glow">
         <div className="max-w-5xl mx-auto px-6">
           <div className="anim-rise">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 rounded-2xl bg-fg/[0.05] border border-fg/12 flex items-center justify-center text-fg">
-                <Icon name={service.icon} size={24} />
+            {/* Premium hero banner */}
+            <div className="relative h-56 sm:h-72 rounded-3xl overflow-hidden mb-8 glass-card">
+              <Image
+                src={service.image}
+                alt={service.title}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
+              <div className="absolute inset-0 bg-accent/12 mix-blend-multiply" />
+              <div className="absolute bottom-5 left-5 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-bg/70 backdrop-blur-md border border-accent-3/25 flex items-center justify-center text-accent-2">
+                  <Icon name={service.icon} size={24} />
+                </div>
+                {service.badge && (
+                  <span className="mono-font text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-accent-3/25 text-accent-2 bg-bg/70 backdrop-blur-md">
+                    {service.badge}
+                  </span>
+                )}
               </div>
-              {service.badge && (
-                <span className="mono-font text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-fg/20 text-fg/70 bg-fg/[0.05]">
-                  {service.badge}
-                </span>
-              )}
             </div>
             <h1 className="display-font text-[clamp(2.4rem,5.5vw,64px)] font-bold text-fg leading-tight mb-4">
               {service.title}

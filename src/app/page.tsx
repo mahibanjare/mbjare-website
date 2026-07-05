@@ -3,8 +3,10 @@ import { ArrowRight } from 'lucide-react'
 import Hero from '@/components/sections/Hero'
 import ServicesGrid from '@/components/sections/ServicesGrid'
 import StatsSection from '@/components/sections/StatsSection'
+import WhyUs from '@/components/sections/WhyUs'
 import Process from '@/components/sections/Process'
 import Testimonials from '@/components/sections/Testimonials'
+import FounderNote from '@/components/sections/FounderNote'
 import CTA from '@/components/sections/CTA'
 import { FadeUp } from '@/components/motion'
 
@@ -49,8 +51,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <WhyUs />
       <Process />
       <Testimonials />
+      <FounderNote />
       <CTA />
     </>
   )

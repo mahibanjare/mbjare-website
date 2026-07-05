@@ -21,9 +21,9 @@ export const site = {
 
 export const milestones = [
   { year: '2025 Q1', event: 'Mbjare InfoTech founded — first client in week 1' },
-  { year: '2025 Q2', event: 'First 10 clients onboarded across Chhattisgarh' },
+  { year: '2025 Q2', event: 'First paying clients onboarded across Chhattisgarh' },
   { year: '2025 Q3', event: 'Launched WhatsApp Automation & App Dev services' },
-  { year: '2025 Q4', event: '30+ happy clients, ₹10L+ revenue generated for clients' },
+  { year: '2025 Q4', event: 'Client brands shipped end-to-end — every client rated us 5★' },
   { year: '2026 Q1', event: 'Rebuilt as an AI-first agency — AI chatbots, agents & automation' },
 ]
 

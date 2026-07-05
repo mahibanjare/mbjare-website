@@ -46,7 +46,7 @@ export default function AboutPage() {
                 a vision, and our first client signed in week one.
               </p>
               <p>
-                Since then we&apos;ve shipped 50+ projects: live client websites like SR
+                Since then we&apos;ve built brands end-to-end: live client websites like SR
                 Petrochemicals and BPS Godhi, brand rebuilds like Ankita Beauty Salon,
                 identities built from scratch like Grafiya, plus the automations and ad
                 campaigns that keep them growing.

@@ -29,8 +29,8 @@ export const testimonials: Testimonial[] = [
 ]
 
 export const stats: Stat[] = [
-  { value: 50, suffix: '+', label: 'Projects Delivered' },
-  { value: 30, suffix: '+', label: 'Happy Clients' },
-  { value: 100, suffix: '%', label: 'Satisfaction Rate' },
+  { value: 4, suffix: '', label: 'Client Brands Built End-to-End' },
+  { value: 5, suffix: '★', label: 'Rating From Every Client' },
+  { value: 2, suffix: 'hr', label: 'Typical Reply Time' },
   { value: 24, suffix: '/7', label: 'AI Working For You' },
 ]

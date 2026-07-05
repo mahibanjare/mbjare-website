@@ -4,6 +4,7 @@ export interface Service {
   title: string
   subtitle: string
   desc: string
+  image: string
   features: string[]
   price: string
   timeline: string

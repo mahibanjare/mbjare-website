@@ -1,28 +1,33 @@
 @import "tailwindcss";
 
-/* ── Theme tokens ───────────────────────────────────────────── */
+/* ── Theme tokens (Prana-OS teal palette) ───────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg: #030a09;
-  --bg-2: #070f0e;
-  --bg-3: #0d1614;
-  --fg: #e2eeec;
-  --accent: #009688;
-  --accent-2: #26a69a;
-  --accent-3: #4db6ac;
-  --accent-soft: rgba(0, 150, 136, 0.16);
+  --bg: #03161a;
+  --bg-2: #062a2c;
+  --bg-3: #020e12;
+  --fg: #e9fffb;
+  /* Vivid teal family — teal-500 → teal-300 */
+  --accent: #14b8a6;
+  --accent-2: #21d6bd;
+  --accent-3: #46e3cd;
+  --accent-soft: rgba(20, 184, 166, 0.14);
+  --gold: #f5b942;
+  --glow: rgba(20, 184, 166, 0.4);
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  --bg: #fafaf8;
-  --bg-2: #ffffff;
-  --bg-3: #f1f4f3;
-  --fg: #0d1614;
-  --accent: #00796b;
-  --accent-2: #009688;
-  --accent-3: #00897b;
-  --accent-soft: rgba(0, 150, 136, 0.12);
+  --bg: #eafffb;
+  --bg-2: #f5fffd;
+  --bg-3: #d6f7ef;
+  --fg: #0a3b38;
+  --accent: #0d9488;
+  --accent-2: #14b8a6;
+  --accent-3: #0f766e;
+  --accent-soft: rgba(13, 148, 136, 0.12);
+  --gold: #c78a10;
+  --glow: rgba(20, 184, 166, 0.34);
   color-scheme: light;
 }
 
@@ -32,6 +37,7 @@
   --color-fg: var(--fg);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-gold: var(--gold);
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
   --font-mono: var(--font-jetbrains);
@@ -50,10 +56,22 @@ body {
   transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* Old-site signature: subtle teal-tinted dark backdrop */
+/* Prana-OS signature: layered teal radial glow over a deep teal base */
 [data-theme="dark"] body,
 :root:not([data-theme="light"]) body {
-  background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0, 150, 136, 0.12) 0%, transparent 70%);
+  background-image:
+    radial-gradient(1100px 700px at 10% -10%, var(--bg-2), transparent 55%),
+    radial-gradient(900px 600px at 100% 110%, var(--bg-2), transparent 50%),
+    linear-gradient(160deg, var(--bg), var(--bg-3));
+  background-attachment: fixed;
+}
+
+/* Light mode: soft mint wash */
+[data-theme="light"] body {
+  background-image:
+    radial-gradient(1100px 700px at 10% -10%, var(--bg-3), transparent 55%),
+    radial-gradient(900px 600px at 100% 110%, var(--bg-3), transparent 50%),
+    linear-gradient(160deg, var(--bg-2), var(--bg));
   background-attachment: fixed;
 }
 
@@ -73,14 +91,28 @@ body {
 
 /* ── Surfaces ───────────────────────────────────────────────── */
 .glass-card {
-  background: color-mix(in srgb, var(--fg) 2.5%, transparent);
-  border: 1px solid color-mix(in srgb, var(--fg) 9%, transparent);
-  border-radius: 20px;
-  transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease;
+  position: relative;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-3) 16%, transparent);
+  border-radius: 22px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+}
+/* Prana-OS top-sheen highlight */
+.glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, color-mix(in srgb, #fff 6%, transparent), transparent 38%);
+  opacity: 0.5;
+  pointer-events: none;
 }
 .glass-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  border-color: color-mix(in srgb, var(--accent-2) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow: 0 18px 44px -20px var(--glow);
 }
 
 /* Light mode: solid white cards with soft elevation read better than glass */
@@ -125,13 +157,19 @@ body {
   justify-content: center;
   gap: 10px;
   padding: 14px 30px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff;
-  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: #021014;
+  font-weight: 700;
   font-size: 14px;
   border-radius: 999px;
   letter-spacing: 0.02em;
+  box-shadow: 0 12px 30px -10px var(--glow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* Light mode: darker teal reads better with white text */
+[data-theme="light"] .btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  color: #fff;
 }
 .btn-primary {
   position: relative;
@@ -286,7 +324,8 @@ body {
   height: 420px;
   top: 8%;
   left: -8%;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  opacity: 0.5;
   animation: drift 14s ease-in-out infinite;
 }
 .orb-2 {
@@ -294,7 +333,8 @@ body {
   height: 360px;
   bottom: 4%;
   right: -6%;
-  background: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  background: color-mix(in srgb, var(--accent-3) 26%, transparent);
+  opacity: 0.45;
   animation: drift 18s ease-in-out infinite reverse;
 }
 
@@ -450,6 +490,62 @@ body {
   font-weight: 700;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
     0 6px 18px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ── Floating WhatsApp CTA ──────────────────────────────────── */
+@keyframes waPulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.wa-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px 13px 15px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #25d366, #17a34a);
+  color: #04120a;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 14px 34px -10px rgba(37, 211, 102, 0.55);
+  animation: waPulse 2.6s ease-out infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.wa-float:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 46px -10px rgba(37, 211, 102, 0.7);
+}
+.wa-float .wa-label {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .wa-float { padding: 14px; }
+  .wa-float .wa-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-float { animation: none; }
+}
+
+/* ── Guarantee / trust check rows ───────────────────────────── */
+.guarantee-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.guarantee-check .gc-tick {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent-2);
 }
 
 /* ── Scroll progress bar ────────────────────────────────────── */

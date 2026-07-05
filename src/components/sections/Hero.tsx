@@ -5,8 +5,8 @@ import { site } from '@/content/site'
 const trustedBy = ['SR Petrochemicals', 'BPS Godhi', 'Ankita Beauty Salon', 'Grafiya']
 
 const chips = [
-  { icon: Code2, label: '50+ Projects Delivered' },
-  { icon: Star, label: '30+ Happy Clients' },
+  { icon: Code2, label: '4 Brands Built End-to-End' },
+  { icon: Star, label: 'Every Client Rates Us 5★' },
   { icon: Zap, label: '2-Hour Response Time' },
 ]
 
@@ -36,7 +36,8 @@ export default function Hero() {
 
         <p className="text-fg/45 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed anim-rise anim-d2">
           Websites, apps, AI chatbots &amp; automations that work while you sleep.
-          From zero to ₹10L revenue — we&apos;ve helped 30+ businesses transform digitally.
+          From first idea to launch — we build digital engines real businesses trust,
+          and every client rates us 5★.
         </p>
 
         {/* Stat chips */}
