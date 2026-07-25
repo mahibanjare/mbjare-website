@@ -21,10 +21,10 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
       />
       <div className="flex gap-1 mb-4">
         {Array.from({ length: t.rating }).map((_, i) => (
-          <Star key={i} size={13} className="fill-accent-2 text-accent-2" />
+          <Star key={i} size={13} className="fill-gold text-gold" />
         ))}
       </div>
-      <p className="text-fg/60 text-sm leading-relaxed mb-6">&ldquo;{t.msg}&rdquo;</p>
+      <p className="text-fg/60 text-sm leading-relaxed mb-6 italic">&ldquo;{t.msg}&rdquo;</p>
       <div className="flex items-center gap-3 pt-4 border-t border-fg/[0.06]">
         <span className="avatar-ring w-10 h-10 text-xs shrink-0">{initials(t.name)}</span>
         <div>
@@ -38,10 +38,10 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
 
 export default function Testimonials() {
   return (
-    <section className="py-24 overflow-hidden">
+    <section className="py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-12">
         <FadeUp>
-          <div className="section-tag mb-5"><span className="text-fg/35">04</span> Client Love</div>
+          <div className="kicker mb-3">04 · Client Love</div>
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             Trusted by businesses <span className="text-outline">like yours</span>
           </h2>
@@ -49,7 +49,7 @@ export default function Testimonials() {
             <div className="flex items-center gap-2">
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={16} className="fill-accent-2 text-accent-2" />
+                  <Star key={i} size={16} className="fill-gold text-gold" />
                 ))}
               </div>
               <span className="text-fg font-semibold text-sm">5.0</span>

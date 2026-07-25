@@ -8,7 +8,7 @@ import NewsletterForm from '@/components/forms/NewsletterForm'
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-fg/[0.07] mt-24">
+    <footer className="footer-anchor relative mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-12 gap-12">
           {/* Brand */}

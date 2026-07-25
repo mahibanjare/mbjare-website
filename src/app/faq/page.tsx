@@ -49,9 +49,9 @@ export default function FaqPage() {
             {faqs.map((f, i) => (
               <FadeUp key={f.q} index={i}>
                 <details className="glass-card group">
-                  <summary className="p-5 cursor-pointer list-none flex items-center justify-between text-fg font-medium text-sm">
+                  <summary className="p-5 cursor-pointer list-none flex items-center justify-between gap-3 text-fg font-semibold text-sm">
                     {f.q}
-                    <span className="text-fg/30 group-open:rotate-45 transition-transform text-lg leading-none">+</span>
+                    <span className="text-accent-2 group-open:rotate-45 transition-transform duration-300 text-2xl leading-none flex-none">+</span>
                   </summary>
                   <p className="px-5 pb-5 text-fg/45 text-sm leading-relaxed">{f.a}</p>
                 </details>

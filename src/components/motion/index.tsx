@@ -1,6 +1,6 @@
 'use client'
 
-import { LazyMotion, domAnimation, m, type Variants } from 'framer-motion'
+import { LazyMotion, domAnimation, m, useReducedMotion, type Variants } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 export function MotionProvider({ children }: { children: ReactNode }) {
@@ -59,6 +59,30 @@ export function Stagger({
       whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
       transition={{ staggerChildren: 0.08, delayChildren: delay }}
+    >
+      {children}
+    </m.div>
+  )
+}
+
+/* Gentle infinite bob — ds hero-logo float, framer-motion edition */
+export function FloatY({
+  children,
+  className,
+  amplitude = 9,
+  duration = 7,
+}: {
+  children: ReactNode
+  className?: string
+  amplitude?: number
+  duration?: number
+}) {
+  const reduced = useReducedMotion()
+  return (
+    <m.div
+      className={className}
+      animate={reduced ? undefined : { y: [0, -amplitude, 0] }}
+      transition={{ duration, repeat: Infinity, ease: 'easeInOut' }}
     >
       {children}
     </m.div>

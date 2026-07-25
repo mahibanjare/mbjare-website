@@ -1,31 +1,26 @@
 import Link from 'next/link'
-import { ArrowRight, MessageSquare, ChevronDown, Zap, Code2, Star } from 'lucide-react'
+import { ArrowRight, MessageSquare, ChevronDown } from 'lucide-react'
 import { site } from '@/content/site'
 
-const trustedBy = ['SR Petrochemicals', 'BPS Godhi', 'Ankita Beauty Salon', 'Grafiya']
-
-const chips = [
-  { icon: Code2, label: '4 Brands Built End-to-End' },
-  { icon: Star, label: 'Every Client Rates Us 5★' },
-  { icon: Zap, label: '2-Hour Response Time' },
-]
+const trustedBy = ['Dharshakti Sweets', 'SR Petrochemicals', 'Bright Public School Godhi', 'Ankita Beauty Salon', 'Grafiya']
 
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center hero-glow overflow-hidden">
-      {/* Backdrop grid */}
-      <div className="absolute inset-0 opacity-[0.05] hero-grid" />
+      {/* ds-style dotted grid, fading downward */}
+      <div className="absolute inset-0 opacity-40 dot-grid" aria-hidden />
 
       {/* Floating aurora orbs — pure CSS, GPU-composited */}
       <div className="orb orb-1" aria-hidden />
       <div className="orb orb-2" aria-hidden />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-32 pb-24">
-        <div className="section-tag badge-glow mx-auto w-fit mb-8 anim-rise">
-          <span className="teal-dot w-1.5 h-1.5" /> India&apos;s AI-First Digital Agency
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-36 pb-24">
+        {/* Gold eyebrow — the only gold in the hero */}
+        <div className="est-line mx-auto w-fit mb-8 anim-rise">
+          India&apos;s AI-First Digital Agency
         </div>
 
-        <h1 className="display-font text-[clamp(2.8rem,7.5vw,86px)] font-bold leading-[1.04] mb-7 anim-rise anim-d1">
+        <h1 className="display-font text-[clamp(2.8rem,7.5vw,86px)] font-bold leading-[1.04] tracking-[-0.03em] mb-8 anim-rise anim-d1">
           <span className="text-fg">We Build </span>
           <span className="text-gradient-anim">AI-Powered</span>
           <br />
@@ -34,24 +29,18 @@ export default function Hero() {
           <span className="text-fg">That Grow Your Business</span>
         </h1>
 
-        <p className="text-fg/45 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed anim-rise anim-d2">
-          Websites, apps, AI chatbots &amp; automations that work while you sleep.
-          From first idea to launch — we build digital engines real businesses trust,
-          and every client rates us 5★.
+        <p className="text-fg/45 text-lg md:text-xl max-w-xl mx-auto mb-6 leading-relaxed anim-rise anim-d2">
+          Websites, apps, AI chatbots &amp; automations that{' '}
+          <span className="text-fg font-medium">work while you sleep</span> — built
+          end-to-end, rated 5★ by every client.
         </p>
 
-        {/* Stat chips */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-10 anim-rise anim-d2">
-          {chips.map((c) => (
-            <span
-              key={c.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-fg/10 bg-fg/[0.03] text-fg/55 text-xs font-medium transition-all duration-300 hover:border-accent/40 hover:bg-accent-soft hover:text-fg hover:-translate-y-0.5"
-            >
-              <c.icon size={12} className="text-accent-2" /> {c.label}
-            </span>
-          ))}
-        </div>
+        {/* Quiet proof line — one voice, no competing chips */}
+        <p className="mono-font text-[11px] uppercase tracking-[0.25em] text-fg/35 mb-12 anim-rise anim-d2">
+          5 brands built end-to-end&ensp;·&ensp;5★ from every client&ensp;·&ensp;2-hour replies
+        </p>
 
+        {/* One primary action. One quiet alternative. */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 anim-rise anim-d3">
           <Link href="/contact" className="btn-primary">
             Start Your Project — It&apos;s Free <ArrowRight size={16} />
@@ -61,18 +50,18 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Trust strip — real clients, live on the internet */}
-        <div className="mt-16 anim-rise anim-d4">
-          <div className="mono-font text-[10px] uppercase tracking-[0.35em] text-fg/30 mb-5">
+        {/* Trust strip — quiet, editorial */}
+        <div className="mt-20 anim-rise anim-d4">
+          <div className="mono-font text-[10px] uppercase tracking-[0.35em] text-fg/30 mb-6">
             Brands we&apos;ve built — live on the internet
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {trustedBy.map((name) => (
               <span
                 key={name}
-                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-fg/10 bg-fg/[0.02] display-font text-sm font-semibold text-fg/45 transition-all duration-300 hover:text-fg hover:border-accent/40 hover:bg-accent-soft hover:-translate-y-0.5"
+                className="display-font text-sm font-semibold text-fg/40 hover:text-fg transition-colors duration-300"
               >
-                <span className="teal-dot w-1.5 h-1.5" /> {name}
+                {name}
               </span>
             ))}
           </div>

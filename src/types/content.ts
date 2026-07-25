@@ -19,6 +19,8 @@ export interface Project {
   deliverables: string[]
   tags: string[]
   year: string
+  /** Screenshot of the live site, served from /public (e.g. /projects/name.png) */
+  image?: string
 }
 
 export interface Testimonial {

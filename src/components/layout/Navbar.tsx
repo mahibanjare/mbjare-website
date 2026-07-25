@@ -101,11 +101,10 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-40 md:hidden bg-bg/[0.98] backdrop-blur-xl flex flex-col items-center justify-center gap-7 transition-all duration-500 ${
+        className={`fixed inset-0 z-40 md:hidden bg-bg/[0.98] backdrop-blur-xl flex flex-col items-center justify-center gap-7 pt-24 transition-all duration-500 ${
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        <Image src="/logo.svg" alt="Mbjare" width={88} height={88} className="logo-glow mb-2" />
         {navLinks.map((link, i) => (
           <Link
             key={link.path}

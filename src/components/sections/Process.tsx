@@ -10,10 +10,10 @@ const steps = [
 
 export default function Process() {
   return (
-    <section className="py-24">
+    <section className="py-28">
       <div className="max-w-7xl mx-auto px-6">
         <FadeUp className="mb-14">
-          <div className="section-tag mb-5"><span className="text-fg/35">03</span> How We Work</div>
+          <div className="kicker mb-3">03 · How We Work</div>
           <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
             From idea to <span className="text-outline">impact</span> — in weeks
           </h2>
@@ -34,10 +34,9 @@ export default function Process() {
         <Stagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {steps.map((s, i) => (
             <FadeUp key={s.n} index={i}>
-              <SpotlightDiv className="glass-card spotlight-card p-7 h-full group transition-transform duration-300">
-                <div className="display-font text-5xl font-bold text-gradient mb-6 transition-transform duration-300 group-hover:-translate-y-0.5">
-                  {s.n}
-                </div>
+              <SpotlightDiv className="glass-card spotlight-card p-7 pt-16 h-full group transition-transform duration-300">
+                {/* ds watermark step number — the card's single ornament */}
+                <span className="step-num" aria-hidden>{s.n}</span>
                 <h3 className="display-font text-lg font-semibold text-fg mb-3 transition-colors group-hover:text-accent-2">
                   {s.title}
                 </h3>

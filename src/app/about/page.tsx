@@ -47,7 +47,7 @@ export default function AboutPage() {
               </p>
               <p>
                 Since then we&apos;ve built brands end-to-end: live client websites like SR
-                Petrochemicals and BPS Godhi, brand rebuilds like Ankita Beauty Salon,
+                Petrochemicals and Bright Public School Godhi, brand rebuilds like Ankita Beauty Salon,
                 identities built from scratch like Grafiya, plus the automations and ad
                 campaigns that keep them growing.
               </p>

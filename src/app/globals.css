@@ -13,21 +13,33 @@
   --accent-3: #46e3cd;
   --accent-soft: rgba(20, 184, 166, 0.14);
   --gold: #f5b942;
+  --gold-b: #ffd27a;
   --glow: rgba(20, 184, 166, 0.4);
+  /* ds-style layered soft shadows (cool-tinted) */
+  --sh: 0 1px 3px rgba(0, 0, 0, 0.28), 0 14px 34px -12px rgba(0, 0, 0, 0.45);
+  --sh-l: 0 4px 14px rgba(0, 0, 0, 0.3), 0 28px 64px -20px rgba(0, 0, 0, 0.55);
+  --glow-ring: 0 0 0 1px rgba(20, 184, 166, 0.14), 0 8px 26px -8px rgba(20, 184, 166, 0.3);
+  --glow-gold: 0 0 0 1px rgba(245, 185, 66, 0.2), 0 8px 26px -8px rgba(245, 185, 66, 0.3);
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  --bg: #eafffb;
-  --bg-2: #f5fffd;
-  --bg-3: #d6f7ef;
-  --fg: #0a3b38;
+  /* ds-style icy near-white canvas — teal stays an accent, not a wash */
+  --bg: #f3faf9;
+  --bg-2: #ffffff;
+  --bg-3: #e3efed;
+  --fg: #10312e;
   --accent: #0d9488;
   --accent-2: #14b8a6;
   --accent-3: #0f766e;
-  --accent-soft: rgba(13, 148, 136, 0.12);
+  --accent-soft: rgba(13, 148, 136, 0.08);
   --gold: #c78a10;
+  --gold-b: #e0a92e;
   --glow: rgba(20, 184, 166, 0.34);
+  --sh: 0 1px 3px rgba(10, 59, 56, 0.06), 0 14px 34px -12px rgba(10, 59, 56, 0.14);
+  --sh-l: 0 4px 14px rgba(10, 59, 56, 0.08), 0 28px 64px -20px rgba(10, 59, 56, 0.22);
+  --glow-ring: 0 0 0 1px rgba(13, 148, 136, 0.12), 0 8px 26px -8px rgba(13, 148, 136, 0.22);
+  --glow-gold: 0 0 0 1px rgba(199, 138, 16, 0.2), 0 8px 26px -8px rgba(199, 138, 16, 0.28);
   color-scheme: light;
 }
 
@@ -37,8 +49,10 @@
   --color-fg: var(--fg);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
   --color-accent-soft: var(--accent-soft);
   --color-gold: var(--gold);
+  --color-gold-b: var(--gold-b);
   --font-display: var(--font-space-grotesk);
   --font-body: var(--font-inter);
   --font-mono: var(--font-jetbrains);
@@ -57,22 +71,27 @@ body {
   transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* Prana-OS signature: layered teal radial glow over a deep teal base */
+/* ds-style aurora canvas — 4-corner radial wash (teal top-right, gold left,
+   deep teal bottom-right, faint green bottom-left) floating over the base */
 [data-theme="dark"] body,
 :root:not([data-theme="light"]) body {
   background-image:
-    radial-gradient(1100px 700px at 10% -10%, var(--bg-2), transparent 55%),
-    radial-gradient(900px 600px at 100% 110%, var(--bg-2), transparent 50%),
-    linear-gradient(160deg, var(--bg), var(--bg-3));
+    radial-gradient(60% 50% at 88% -5%, rgba(20, 184, 166, 0.14) 0%, transparent 60%),
+    radial-gradient(45% 40% at 5% 28%, rgba(245, 185, 66, 0.07) 0%, transparent 62%),
+    radial-gradient(55% 45% at 95% 72%, rgba(33, 214, 189, 0.08) 0%, transparent 60%),
+    radial-gradient(40% 35% at 15% 92%, rgba(37, 211, 102, 0.05) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
   background-attachment: fixed;
 }
 
-/* Light mode: soft mint wash */
+/* Light mode: icy aurora à la ds — soft washes over a white→ice gradient */
 [data-theme="light"] body {
   background-image:
-    radial-gradient(1100px 700px at 10% -10%, var(--bg-3), transparent 55%),
-    radial-gradient(900px 600px at 100% 110%, var(--bg-3), transparent 50%),
-    linear-gradient(160deg, var(--bg-2), var(--bg));
+    radial-gradient(60% 50% at 88% -5%, rgba(13, 148, 136, 0.08) 0%, transparent 60%),
+    radial-gradient(45% 40% at 5% 28%, rgba(199, 138, 16, 0.07) 0%, transparent 62%),
+    radial-gradient(55% 45% at 95% 72%, rgba(15, 118, 110, 0.06) 0%, transparent 60%),
+    radial-gradient(40% 35% at 15% 92%, rgba(37, 211, 102, 0.04) 0%, transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, var(--bg) 42%, var(--bg-3) 100%);
   background-attachment: fixed;
 }
 
@@ -117,7 +136,8 @@ h1, h2, h3 {
 .glass-card:hover {
   border-color: color-mix(in srgb, var(--accent-2) 55%, transparent);
   background: color-mix(in srgb, var(--accent) 8%, transparent);
-  box-shadow: 0 18px 44px -20px var(--glow);
+  transform: translateY(-5px);
+  box-shadow: var(--sh-l), var(--glow-ring);
 }
 
 /* Light mode: solid white cards with soft elevation read better than glass */
@@ -127,9 +147,9 @@ h1, h2, h3 {
   box-shadow: 0 1px 2px rgba(13, 22, 20, 0.04), 0 10px 28px rgba(13, 22, 20, 0.05);
 }
 [data-theme="light"] .glass-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
   background: var(--bg-2);
-  box-shadow: 0 2px 4px rgba(13, 22, 20, 0.05), 0 14px 36px rgba(0, 121, 107, 0.10);
+  box-shadow: var(--sh-l), var(--glow-ring);
 }
 
 .section-tag {
@@ -169,9 +189,9 @@ h1, h2, h3 {
   border-color: color-mix(in srgb, var(--accent-3) 26%, transparent);
 }
 [data-theme="light"] .nav-pill {
-  background: rgba(245, 255, 253, 0.82);
-  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
-  box-shadow: 0 22px 50px -24px rgba(13, 148, 136, 0.45);
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(16, 49, 46, 0.1);
+  box-shadow: 0 22px 50px -24px rgba(16, 49, 46, 0.28);
 }
 
 /* ── Premium gradient-border panel ──────────────────────────── */
@@ -303,8 +323,8 @@ h1, h2, h3 {
 }
 [data-theme="light"] .hero-glow {
   background:
-    radial-gradient(ellipse 60% 45% at 50% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%),
-    radial-gradient(ellipse 40% 30% at 80% 100%, color-mix(in srgb, var(--accent) 4%, transparent), transparent 70%);
+    radial-gradient(ellipse 60% 45% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 100%, color-mix(in srgb, var(--accent) 3%, transparent), transparent 70%);
 }
 [data-theme="light"] .orb {
   opacity: 0.45;
@@ -320,16 +340,22 @@ h1, h2, h3 {
   color: color-mix(in srgb, var(--fg) 68%, transparent);
 }
 
-/* Footer: distinct elevated surface in light mode */
-[data-theme="light"] footer {
-  background:
-    linear-gradient(180deg, rgba(0, 150, 136, 0.045), transparent 35%),
-    var(--bg-2);
-  border-top-color: rgba(13, 22, 20, 0.1);
+/* ── ds-style anchor footer — deep teal gradient, always dark ── */
+.footer-anchor {
+  --fg: #e9fffb;
+  color: var(--fg);
+  background: linear-gradient(168deg, #06302f 0%, #031a1c 80%);
+  border-top: 1px solid rgba(70, 227, 205, 0.16);
 }
-[data-theme="light"] footer input {
-  background: var(--bg);
-  border-color: rgba(13, 22, 20, 0.14);
+.footer-anchor p {
+  color: color-mix(in srgb, var(--fg) 55%, transparent);
+}
+[data-theme="light"] .footer-anchor {
+  background: linear-gradient(168deg, #0a4a44 0%, #052a28 80%);
+  border-top: 1px solid rgba(70, 227, 205, 0.2);
+}
+[data-theme="light"] .footer-anchor p {
+  color: color-mix(in srgb, var(--fg) 60%, transparent);
 }
 
 .hero-grid {
@@ -460,6 +486,13 @@ h1, h2, h3 {
 }
 .spotlight-card:hover::before {
   opacity: 1;
+}
+[data-theme="light"] .spotlight-card::before {
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 60%
+  );
 }
 .spotlight-card > * {
   position: relative;
@@ -620,6 +653,240 @@ h1, h2, h3 {
   background: linear-gradient(90deg, var(--accent), var(--accent-3));
   z-index: 60;
   box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+/* ═══ ds design language — teal-brand translation ═══════════ */
+
+/* Kicker eyebrow (ds .kicker) — teal voice; gold is reserved for the hero
+   eyebrow, stars, foil strips and rare badges so it stays special */
+.kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+/* Eyebrow with flanking gradient rule lines (ds .est-line) */
+.est-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+.est-line::before,
+.est-line::after {
+  content: "";
+  width: 38px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-b));
+  opacity: 0.85;
+}
+.est-line::after {
+  background: linear-gradient(270deg, transparent, var(--gold-b));
+}
+
+/* Glass pill chips with square dot (ds .pill) */
+.pill-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--fg) 72%, transparent);
+  background: color-mix(in srgb, var(--bg-2) 58%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-3) 22%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.pill-glass:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent-2) 45%, transparent);
+  color: var(--fg);
+}
+.pill-glass .dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 3px;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-2) 25%, transparent);
+}
+[data-theme="light"] .pill-glass {
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 4px 16px -8px rgba(10, 59, 56, 0.16);
+}
+
+/* Gold gradient button (ds .btn-gold) */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 30px;
+  background: linear-gradient(150deg, var(--gold-b), color-mix(in srgb, var(--gold) 80%, #8a5f00));
+  color: #241703;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  box-shadow: var(--glow-gold);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-gold), 0 16px 40px color-mix(in srgb, var(--gold) 30%, transparent);
+}
+.btn-gold:active {
+  transform: scale(0.97);
+}
+
+/* WhatsApp gradient button (ds .btn-wa) */
+.btn-wa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 30px;
+  background: linear-gradient(150deg, #2cb463, #149049);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 26px -8px rgba(20, 144, 73, 0.55);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-wa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -10px rgba(20, 144, 73, 0.6);
+}
+.btn-wa:active {
+  transform: scale(0.97);
+}
+
+/* Gradient icon tile (ds .card .emoji) */
+.icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--accent) 18%, transparent),
+    color-mix(in srgb, var(--accent) 5%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--accent-3) 25%, transparent);
+  color: var(--accent-2);
+}
+/* Light mode: whisper-tint tile on white cards (ds card emoji tile) */
+[data-theme="light"] .icon-tile {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--accent) 9%, #ffffff),
+    color-mix(in srgb, var(--accent) 3%, #ffffff)
+  );
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+/* Watermark step number (ds .step::before) */
+.step-num {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1;
+  color: color-mix(in srgb, var(--accent) 20%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Deep gradient anchor card with gold corner glow (ds .story-card) */
+.anchor-card {
+  --fg: #e9fffb;
+  color: var(--fg);
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  background: linear-gradient(112deg, #0a4a44 0%, #06302f 52%, #031a1c 100%);
+  border: 1px solid rgba(70, 227, 205, 0.24);
+  box-shadow: var(--sh-l);
+}
+.anchor-card::after {
+  content: "";
+  position: absolute;
+  right: -50px;
+  top: -50px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 24%, transparent), transparent 68%);
+  pointer-events: none;
+}
+.anchor-card p {
+  color: color-mix(in srgb, var(--fg) 60%, transparent);
+}
+[data-theme="light"] .anchor-card {
+  --fg: #e9fffb;
+}
+[data-theme="light"] .anchor-card p {
+  color: color-mix(in srgb, var(--fg) 62%, transparent);
+}
+
+/* Gold foil strip across the top of premium panels (ds .rc-top::after).
+   Rendered as a real element (<span class="foil-strip" aria-hidden />) so it
+   never collides with the ::before/::after pseudos of its host card. */
+.foil-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #c99733 18%,
+    var(--gold) 32%,
+    #ffe9b8 50%,
+    var(--gold) 68%,
+    #c99733 82%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Dotted-grid hero overlay, fading downward (ds .hero::before) */
+.dot-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--accent) 38%, transparent) 1px,
+    transparent 0
+  );
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 75%);
+  mask-image: linear-gradient(to bottom, #000, transparent 75%);
+}
+
+/* Full-bleed frosted stats band (ds .stats) */
+.stats-strip {
+  border-top: 1px solid color-mix(in srgb, var(--accent-3) 14%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-3) 14%, transparent);
+  background: color-mix(in srgb, var(--bg-2) 52%, transparent);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
 }
 
 /* ── Accessible focus ring ──────────────────────────────────── */

@@ -3,12 +3,13 @@ import { site } from '@/content/site'
 
 export default function FounderNote() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-28 relative overflow-hidden">
       <div className="hero-glow absolute inset-0 opacity-50" aria-hidden />
       <div className="relative max-w-3xl mx-auto px-6">
         <FadeUp>
-          <div className="glass-card p-8 md:p-12">
-            <div className="section-tag mb-7">A note from the founder</div>
+          <div className="anchor-card p-8 md:p-12">
+            <span className="foil-strip" aria-hidden />
+            <div className="kicker mb-7">A note from the founder</div>
 
             <blockquote className="display-font text-2xl md:text-[28px] leading-snug text-fg font-medium">
               &ldquo;When you hire Mbjare, you&apos;re not hiring a faceless agency. You&apos;re

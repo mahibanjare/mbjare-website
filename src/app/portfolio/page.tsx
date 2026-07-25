@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
 import { projects } from '@/content/projects'
 import CTA from '@/components/sections/CTA'
@@ -7,7 +8,7 @@ import { FadeUp } from '@/components/motion'
 export const metadata: Metadata = {
   title: 'Portfolio — Real Client Work',
   description:
-    'Live client websites, brand identities and ad campaigns: SR Petrochemicals, BPS Godhi, Ankita Beauty Salon, Grafiya and more.',
+    'Live client websites, brand identities and ad campaigns: Dharshakti Sweets & Restaurant, SR Petrochemicals, Bright Public School Godhi, Ankita Beauty Salon, Grafiya and more.',
   alternates: { canonical: '/portfolio' },
 }
 
@@ -37,8 +38,22 @@ export default function PortfolioPage() {
                 href={p.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass-card p-8 flex flex-col h-full group"
+                className="glass-card overflow-hidden flex flex-col h-full group"
               >
+                {/* Live-site screenshot banner (ds gallery-style zoom on hover) */}
+                {p.image && (
+                  <div className="relative aspect-[16/10] overflow-hidden border-b border-fg/[0.06]">
+                    <Image
+                      src={p.image}
+                      alt={`${p.title} — live website`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.05]"
+                    />
+                  </div>
+                )}
+
+                <div className="p-8 flex flex-col flex-1">
                 <div className="flex items-start justify-between mb-6">
                   <span className="mono-font text-[10px] uppercase tracking-[0.25em] text-fg/35 border border-fg/10 rounded-full px-3 py-1.5">
                     {p.category}
@@ -73,6 +88,7 @@ export default function PortfolioPage() {
                       {p.url.replace('https://', '')}
                     </span>
                   )}
+                </div>
                 </div>
               </a>
             </FadeUp>

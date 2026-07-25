@@ -15,6 +15,7 @@ export default function CTA() {
       <div className="hero-glow absolute inset-0" />
       <div className="relative max-w-5xl mx-auto px-6">
         <FadeUp className="panel-premium px-6 py-16 sm:px-16 sm:py-20 text-center">
+          <span className="foil-strip" aria-hidden />
           <div className="section-tag badge-glow mx-auto w-fit mb-6">
             <span className="teal-dot w-1.5 h-1.5" /> Only a few project slots open this month
           </div>
