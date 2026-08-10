@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Inbox, Loader, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { getClient, getMyTickets } from '@/app/portal/actions'
 import { getServices } from '@/lib/content'
 import { supabaseConfigured } from '@/lib/supabase'
@@ -56,42 +56,12 @@ export default async function PortalPage() {
   const [tickets, services] = await Promise.all([getMyTickets(), getServices()])
   const categories = ['General / Other', ...services.map((s) => s.title)]
 
-  const stats = [
-    { label: 'Open', value: tickets.filter((t) => t.status === 'Open').length, icon: Inbox, tone: 'text-gold' },
-    { label: 'In Progress', value: tickets.filter((t) => t.status === 'In Progress').length, icon: Loader, tone: 'text-accent' },
-    { label: 'Resolved', value: tickets.filter((t) => t.status === 'Resolved').length, icon: CheckCircle2, tone: 'text-green-600' },
-  ]
-
   return (
     <main className="min-h-screen">
       <PortalTopbar client={client} />
-
       <div className="max-w-5xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
-        {/* Greeting */}
-        <div className="mb-7">
-          <h1 className="display-font text-2xl sm:text-3xl font-semibold text-fg">
-            Namaste, {client.name.split(' ')[0]} 👋
-          </h1>
-          <p className="text-fg/45 text-sm mt-1">
-            Yahan se apni koi bhi problem ya request raise karein — hum turant dekhenge.
-          </p>
-        </div>
-
-        {/* Stat cards */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-9">
-          {stats.map((s) => (
-            <div key={s.label} className="glass-card p-4 sm:p-5">
-              <s.icon size={18} className={`${s.tone} mb-2`} />
-              <div className="display-font text-2xl sm:text-3xl font-bold text-fg leading-none">{s.value}</div>
-              <div className="mono-font text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-fg/40 mt-1.5">
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Sidebar tabs: My Tickets (table) · Raise Ticket (form) */}
-        <PortalDashboard tickets={tickets} categories={categories} />
+        {/* Sidebar tabs: Dashboard (overview) · My Tickets (table) · Raise Ticket (form) */}
+        <PortalDashboard client={client} tickets={tickets} categories={categories} />
       </div>
     </main>
   )
