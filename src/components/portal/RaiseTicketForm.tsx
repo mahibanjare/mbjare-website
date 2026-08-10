@@ -1,9 +1,15 @@
 'use client'
 
-import { useActionState, useEffect, useRef } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus } from 'lucide-react'
+import { Send, CheckCircle2 } from 'lucide-react'
 import { raiseTicket } from '@/app/portal/actions'
+
+const PRIORITIES = [
+  { value: 'Low', dot: 'bg-fg/40' },
+  { value: 'Medium', dot: 'bg-gold' },
+  { value: 'High', dot: 'bg-red-500' },
+] as const
 
 export default function RaiseTicketForm({
   categories,
@@ -13,23 +19,32 @@ export default function RaiseTicketForm({
   onSuccess?: () => void
 }) {
   const [state, action, pending] = useActionState(raiseTicket, undefined)
+  const [priority, setPriority] = useState('Medium')
   const formRef = useRef<HTMLFormElement>(null)
   const router = useRouter()
 
   useEffect(() => {
     if (state?.ok) {
       formRef.current?.reset()
+      setPriority('Medium')
       router.refresh()
-      onSuccess?.()
+      const t = setTimeout(() => onSuccess?.(), 900)
+      return () => clearTimeout(t)
     }
   }, [state, router, onSuccess])
 
   return (
-    <form ref={formRef} action={action} className="glass-card p-6 md:p-7">
-      <h2 className="display-font text-xl font-semibold text-fg mb-5">Naya ticket raise karein</h2>
+    <div className="glass-card p-6 sm:p-7 max-w-2xl">
+      <div className="mb-6">
+        <h2 className="display-font text-xl font-semibold text-fg">Naya ticket raise karein</h2>
+        <p className="text-fg/45 text-sm mt-1">Jitni detail denge, utni jaldi resolve hoga.</p>
+      </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        <label className="block sm:col-span-2">
+      <form ref={formRef} action={action}>
+        <input type="hidden" name="priority" value={priority} />
+
+        {/* Subject */}
+        <label className="block mb-4">
           <span className="mono-font text-[10px] uppercase tracking-[0.2em] text-fg/45 block mb-1.5">
             Subject
           </span>
@@ -37,17 +52,18 @@ export default function RaiseTicketForm({
             name="subject"
             required
             placeholder="Ek line me apni problem"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm transition-colors focus:outline-none focus:border-accent"
           />
         </label>
 
-        <label className="block">
+        {/* Category */}
+        <label className="block mb-4">
           <span className="mono-font text-[10px] uppercase tracking-[0.2em] text-fg/45 block mb-1.5">
             Service / Category
           </span>
           <select
             name="category"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm transition-colors focus:outline-none focus:border-accent"
           >
             {categories.map((c) => (
               <option key={c}>{c}</option>
@@ -55,41 +71,59 @@ export default function RaiseTicketForm({
           </select>
         </label>
 
-        <label className="block">
+        {/* Priority — segmented control */}
+        <div className="mb-4">
           <span className="mono-font text-[10px] uppercase tracking-[0.2em] text-fg/45 block mb-1.5">
             Priority
           </span>
-          <select
-            name="priority"
-            defaultValue="Medium"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
-          >
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-          </select>
-        </label>
+          <div className="flex gap-1.5 p-1 rounded-xl bg-bg border border-fg/15">
+            {PRIORITIES.map((p) => (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => setPriority(p.value)}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${
+                  priority === p.value
+                    ? 'bg-accent text-[#fffdf8] shadow-[var(--sh)]'
+                    : 'text-fg/55 hover:text-fg'
+                }`}
+              >
+                <span className={`w-2 h-2 rounded-full ${priority === p.value ? 'bg-[#fffdf8]' : p.dot}`} />
+                {p.value}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <label className="block sm:col-span-2">
+        {/* Details */}
+        <label className="block mb-5">
           <span className="mono-font text-[10px] uppercase tracking-[0.2em] text-fg/45 block mb-1.5">
             Details
           </span>
           <textarea
             name="description"
             required
-            rows={4}
-            placeholder="Poori detail likhein — kya problem hai, kahan aa rahi hai…"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
+            rows={5}
+            placeholder="Poori detail likhein — kya problem hai, kahan aa rahi hai, kab se…"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm transition-colors focus:outline-none focus:border-accent resize-y"
           />
         </label>
-      </div>
 
-      {state?.error && <p className="text-red-600 text-sm mt-4">{state.error}</p>}
-      {state?.ok && <p className="text-accent text-sm mt-4 font-medium">Ticket raise ho gaya ✓ Team jald dekhegi.</p>}
+        {state?.error && (
+          <p className="text-red-600 text-sm mb-4 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> {state.error}
+          </p>
+        )}
+        {state?.ok && (
+          <p className="text-green-600 text-sm mb-4 flex items-center gap-2 font-medium">
+            <CheckCircle2 size={15} /> Ticket raise ho gaya ✓ Team jald dekhegi…
+          </p>
+        )}
 
-      <button type="submit" disabled={pending} className="btn-primary mt-5 disabled:opacity-50">
-        <Plus size={15} /> {pending ? 'Bhej rahe hain…' : 'Submit Ticket'}
-      </button>
-    </form>
+        <button type="submit" disabled={pending} className="btn-primary disabled:opacity-50">
+          <Send size={15} /> {pending ? 'Bhej rahe hain…' : 'Submit Ticket'}
+        </button>
+      </form>
+    </div>
   )
 }

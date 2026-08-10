@@ -921,6 +921,19 @@ button:focus-visible {
   .float-b { transform: rotate(-2.5deg); }
 }
 
+/* ── Portal tab transition ──────────────────────────────────── */
+@keyframes tabIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.tab-in { animation: tabIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@media (prefers-reduced-motion: reduce) { .tab-in { animation: none; } }
+
+/* Donut progress ring sweep */
+@keyframes ringGrow { from { stroke-dashoffset: var(--circ); } }
+.ring-anim { animation: ringGrow 1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@media (prefers-reduced-motion: reduce) { .ring-anim { animation: none; } }
+
 /* ── Editorial screenshot frame (real-work mockups) ─────────── */
 .shot-frame {
   background: var(--bg-2);

@@ -23,14 +23,19 @@ export default async function PortalPage() {
   // ── Logged-out: full-screen branded login ──────────────────────────
   if (!client) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-16 hero-glow">
-        <div className="w-full max-w-sm">
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-16 hero-glow relative overflow-hidden">
+        <div className="orb orb-1" aria-hidden />
+        <div className="orb orb-2" aria-hidden />
+        <div className="w-full max-w-sm relative z-10">
           <div className="flex flex-col items-center text-center mb-8">
             <Image src="/logo.svg" alt="Mbjare InfoTech" width={64} height={64} className="logo-glow logo-reveal mb-5" />
-            <div className="kicker mb-2">Client Portal</div>
-            <h1 className="display-font text-2xl font-semibold text-fg">
+            <div className="section-tag mb-4">Client Support Portal</div>
+            <h1 className="display-font text-[28px] leading-tight font-semibold text-fg">
               Support, <span className="text-outline">simplified.</span>
             </h1>
+            <p className="text-fg/45 text-sm mt-2">
+              Login karein — apne tickets raise aur track karein, ek hi jagah.
+            </p>
           </div>
 
           {!supabaseConfigured && (
@@ -41,9 +46,15 @@ export default async function PortalPage() {
 
           <ClientLogin />
 
+          <div className="mt-6 flex items-center justify-center gap-x-5 gap-y-2 flex-wrap text-[11px] text-fg/35 mono-font uppercase tracking-[0.15em]">
+            <span className="inline-flex items-center gap-1.5"><span className="teal-dot w-1.5 h-1.5" /> Secure</span>
+            <span className="inline-flex items-center gap-1.5"><span className="teal-dot w-1.5 h-1.5" /> Private</span>
+            <span className="inline-flex items-center gap-1.5"><span className="teal-dot w-1.5 h-1.5" /> 2-hr reply</span>
+          </div>
+
           <Link
             href="/"
-            className="mt-8 flex items-center justify-center gap-1.5 text-xs text-fg/40 hover:text-fg transition-colors"
+            className="mt-7 flex items-center justify-center gap-1.5 text-xs text-fg/40 hover:text-fg transition-colors"
           >
             <ArrowLeft size={13} /> Website par wapas
           </Link>

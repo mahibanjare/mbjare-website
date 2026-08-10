@@ -12,6 +12,12 @@ function fmt(d: string) {
   }
 }
 
+const dotColor: Record<string, string> = {
+  Open: 'bg-gold',
+  'In Progress': 'bg-accent',
+  Resolved: 'bg-green-500',
+}
+
 export default function PortalOverview({
   clientName,
   tickets,
@@ -27,78 +33,94 @@ export default function PortalOverview({
   const progress = tickets.filter((t) => t.status === 'In Progress').length
   const resolved = tickets.filter((t) => t.status === 'Resolved').length
   const total = tickets.length
+  const pct = total ? resolved / total : 0
 
-  const stats = [
+  const tiles = [
     { label: 'Total', value: total, icon: Layers, tone: 'text-fg', ring: 'bg-fg/[0.06]' },
     { label: 'Open', value: open, icon: Inbox, tone: 'text-gold', ring: 'bg-gold/10' },
     { label: 'In Progress', value: progress, icon: Loader, tone: 'text-accent', ring: 'bg-accent-soft' },
     { label: 'Resolved', value: resolved, icon: CheckCircle2, tone: 'text-green-600', ring: 'bg-green-500/10' },
   ]
 
-  const segs = [
-    { n: open, cls: 'bg-gold' },
-    { n: progress, cls: 'bg-accent' },
-    { n: resolved, cls: 'bg-green-500' },
-  ].filter((s) => s.n > 0)
-
-  const recent = tickets.slice(0, 4)
+  // donut geometry
+  const R = 34
+  const C = 2 * Math.PI * R
+  const recent = tickets.slice(0, 5)
 
   return (
     <div>
       {/* Greeting */}
-      <div className="mb-7">
-        <h1 className="display-font text-2xl sm:text-3xl font-semibold text-fg">
-          Namaste, {clientName.split(' ')[0]} 👋
-        </h1>
-        <p className="text-fg/45 text-sm mt-1 flex items-center gap-1.5">
-          <Clock size={13} className="text-accent" /> Hum har request ka reply 2 ghante ke andar dete hain.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-7">
+        <div>
+          <h1 className="display-font text-2xl sm:text-3xl font-semibold text-fg">
+            Namaste, {clientName.split(' ')[0]} 👋
+          </h1>
+          <p className="text-fg/45 text-sm mt-1">Yahan aapke sab support tickets ek jagah.</p>
+        </div>
+        <span className="inline-flex items-center gap-1.5 text-[11px] mono-font uppercase tracking-[0.15em] text-accent px-3 py-1.5 rounded-full border border-accent/25 bg-accent-soft">
+          <Clock size={12} /> 2-hr reply
+        </span>
       </div>
 
-      {/* Stat tiles */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        {stats.map((s) => (
-          <div key={s.label} className="glass-card p-4 sm:p-5">
-            <div className={`w-9 h-9 rounded-xl ${s.ring} flex items-center justify-center mb-3`}>
-              <s.icon size={17} className={s.tone} />
+      {/* Progress ring + stat tiles */}
+      <div className="grid lg:grid-cols-[auto_1fr] gap-4 mb-5">
+        {/* Ring card */}
+        <div className="glass-card p-6 flex items-center gap-5">
+          <div className="relative w-[92px] h-[92px] shrink-0">
+            <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
+              <circle cx="40" cy="40" r={R} fill="none" stroke="currentColor" strokeWidth="7" className="text-fg/10" />
+              <circle
+                cx="40"
+                cy="40"
+                r={R}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="7"
+                strokeLinecap="round"
+                className="text-green-500 ring-anim"
+                style={{ ['--circ' as string]: `${C}px`, strokeDasharray: `${pct * C} ${C}` }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="display-font text-xl font-bold text-fg leading-none">
+                {Math.round(pct * 100)}%
+              </span>
+              <span className="mono-font text-[8px] uppercase tracking-[0.15em] text-fg/40 mt-0.5">done</span>
             </div>
-            <div className="display-font text-2xl sm:text-3xl font-bold text-fg leading-none">{s.value}</div>
-            <div className="mono-font text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-fg/40 mt-1.5">
-              {s.label}
-            </div>
           </div>
-        ))}
-      </div>
-
-      {/* Status distribution bar */}
-      {total > 0 && (
-        <div className="glass-card p-5 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <span className="mono-font text-[10px] uppercase tracking-[0.15em] text-fg/45">
-              Status breakdown
-            </span>
-            <span className="mono-font text-[10px] text-fg/40">
-              {Math.round((resolved / total) * 100)}% resolved
-            </span>
-          </div>
-          <div className="flex h-2.5 rounded-full overflow-hidden bg-fg/[0.06] mb-3">
-            {segs.map((s, i) => (
-              <div key={i} className={s.cls} style={{ width: `${(s.n / total) * 100}%` }} />
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-[11px] text-fg/50">
-            <span className="inline-flex items-center gap-1.5"><i className="w-2 h-2 rounded-full bg-gold" /> Open {open}</span>
-            <span className="inline-flex items-center gap-1.5"><i className="w-2 h-2 rounded-full bg-accent" /> In Progress {progress}</span>
-            <span className="inline-flex items-center gap-1.5"><i className="w-2 h-2 rounded-full bg-green-500" /> Resolved {resolved}</span>
+          <div className="min-w-0">
+            <div className="mono-font text-[10px] uppercase tracking-[0.15em] text-fg/45 mb-1">Resolution rate</div>
+            <p className="text-fg text-sm leading-snug">
+              {total === 0
+                ? 'Abhi koi ticket nahi.'
+                : resolved === total
+                  ? 'Sab tickets resolved! 🎉'
+                  : `${resolved} of ${total} tickets resolved.`}
+            </p>
           </div>
         </div>
-      )}
 
-      {/* Recent + CTA */}
-      <div className="grid lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-5 items-start">
-        {/* Recent tickets */}
-        <div className="glass-card p-5">
-          <div className="flex items-center justify-between mb-4">
+        {/* Stat tiles */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {tiles.map((s) => (
+            <div key={s.label} className="glass-card p-4 flex flex-col justify-between">
+              <div className={`w-9 h-9 rounded-xl ${s.ring} flex items-center justify-center mb-3`}>
+                <s.icon size={16} className={s.tone} />
+              </div>
+              <div>
+                <div className="display-font text-2xl font-bold text-fg leading-none">{s.value}</div>
+                <div className="mono-font text-[9px] uppercase tracking-[0.14em] text-fg/40 mt-1.5">{s.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent timeline + CTA */}
+      <div className="grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-5 items-start">
+        {/* Recent activity — timeline */}
+        <div className="glass-card p-5 sm:p-6">
+          <div className="flex items-center justify-between mb-5">
             <h2 className="display-font text-lg font-semibold text-fg">Recent activity</h2>
             {total > 0 && (
               <button
@@ -110,32 +132,40 @@ export default function PortalOverview({
               </button>
             )}
           </div>
+
           {recent.length === 0 ? (
-            <div className="text-center py-8">
-              <Inbox size={24} className="text-fg/25 mx-auto mb-2" />
-              <p className="text-fg/45 text-sm">Abhi koi ticket nahi.</p>
+            <div className="text-center py-10">
+              <Inbox size={26} className="text-fg/25 mx-auto mb-3" />
+              <p className="text-fg/45 text-sm mb-4">Abhi tak koi ticket nahi.</p>
+              <button type="button" onClick={onRaise} className="btn-primary !py-2.5 !px-5 text-sm">
+                <Plus size={14} /> Pehla ticket raise karein
+              </button>
             </div>
           ) : (
-            <ul className="divide-y divide-fg/[0.06]">
+            <ol className="relative pl-6">
+              <span className="absolute left-[7px] top-1 bottom-1 w-px bg-fg/10" aria-hidden />
               {recent.map((t) => (
-                <li key={t.id}>
+                <li key={t.id} className="relative mb-5 last:mb-0">
+                  <span
+                    className={`absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full ring-4 ring-bg-2 ${dotColor[t.status] ?? 'bg-fg/30'}`}
+                    aria-hidden
+                  />
                   <button
                     type="button"
                     onClick={onViewTickets}
-                    className="w-full text-left py-3 flex items-center justify-between gap-3 group"
+                    className="w-full text-left group"
                   >
-                    <div className="min-w-0">
-                      <span className="mono-font text-[10px] text-fg/35">#{t.ticket_no}</span>
-                      <p className="text-fg text-sm font-medium truncate group-hover:text-accent transition-colors">
-                        {t.subject}
-                      </p>
-                      <span className="mono-font text-[10px] text-fg/35">{fmt(t.created_at)}</span>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="mono-font text-[10px] text-fg/35">#{t.ticket_no} · {fmt(t.created_at)}</span>
+                      <StatusBadge status={t.status} />
                     </div>
-                    <StatusBadge status={t.status} />
+                    <p className="text-fg text-sm font-medium mt-0.5 truncate group-hover:text-accent transition-colors">
+                      {t.subject}
+                    </p>
                   </button>
                 </li>
               ))}
-            </ul>
+            </ol>
           )}
         </div>
 
@@ -145,7 +175,7 @@ export default function PortalOverview({
           <MessageSquare size={22} className="text-gold-b mb-4" />
           <h3 className="display-font text-lg font-semibold text-fg mb-1.5">Koi nayi problem?</h3>
           <p className="text-fg/60 text-sm leading-relaxed mb-5">
-            Apni service ya system se related koi bhi issue ho — ek ticket raise karein, hum turant dekhenge.
+            Service ya system se related koi bhi issue ho — ek ticket raise karein, hum turant dekhenge.
           </p>
           <button type="button" onClick={onRaise} className="btn-gold text-sm">
             <Plus size={15} /> Raise a Ticket
