@@ -1,11 +1,14 @@
 import type { Metadata } from 'next'
-import { LogOut, Clock, User2, Inbox } from 'lucide-react'
-import { getClient, getMyTickets, clientLogout } from '@/app/portal/actions'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowLeft, Inbox, Loader, CheckCircle2 } from 'lucide-react'
+import { getClient, getMyTickets } from '@/app/portal/actions'
 import { getServices } from '@/lib/content'
 import { supabaseConfigured } from '@/lib/supabase'
 import ClientLogin from '@/components/portal/ClientLogin'
 import RaiseTicketForm from '@/components/portal/RaiseTicketForm'
-import StatusBadge from '@/components/portal/StatusBadge'
+import TicketList from '@/components/portal/TicketList'
+import PortalTopbar from '@/components/portal/PortalTopbar'
 
 export const metadata: Metadata = {
   title: 'Client Portal — Support Tickets',
@@ -15,111 +18,87 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic'
 
-function fmt(d: string) {
-  try {
-    return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-  } catch {
-    return d
-  }
-}
-
 export default async function PortalPage() {
   const client = supabaseConfigured ? await getClient() : null
 
+  // ── Logged-out: full-screen branded login ──────────────────────────
   if (!client) {
     return (
-      <section className="pt-44 pb-28 min-h-screen">
-        <div className="max-w-2xl mx-auto px-6">
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-16 hero-glow">
+        <div className="w-full max-w-sm">
+          <div className="flex flex-col items-center text-center mb-8">
+            <Image src="/logo.svg" alt="Mbjare InfoTech" width={64} height={64} className="logo-glow logo-reveal mb-5" />
+            <div className="kicker mb-2">Client Portal</div>
+            <h1 className="display-font text-2xl font-semibold text-fg">
+              Support, <span className="text-outline">simplified.</span>
+            </h1>
+          </div>
+
           {!supabaseConfigured && (
-            <p className="text-center text-fg/40 text-sm mb-6">
+            <p className="text-center text-fg/40 text-xs mb-5">
               Portal setup hone tak login band hai (Supabase connect karna baaki hai).
             </p>
           )}
+
           <ClientLogin />
+
+          <Link
+            href="/"
+            className="mt-8 flex items-center justify-center gap-1.5 text-xs text-fg/40 hover:text-fg transition-colors"
+          >
+            <ArrowLeft size={13} /> Website par wapas
+          </Link>
         </div>
-      </section>
+      </main>
     )
   }
 
+  // ── Logged-in: portal app shell ────────────────────────────────────
   const [tickets, services] = await Promise.all([getMyTickets(), getServices()])
   const categories = ['General / Other', ...services.map((s) => s.title)]
 
-  const open = tickets.filter((t) => t.status !== 'Resolved').length
-  const resolved = tickets.filter((t) => t.status === 'Resolved').length
+  const stats = [
+    { label: 'Open', value: tickets.filter((t) => t.status === 'Open').length, icon: Inbox, tone: 'text-gold' },
+    { label: 'In Progress', value: tickets.filter((t) => t.status === 'In Progress').length, icon: Loader, tone: 'text-accent' },
+    { label: 'Resolved', value: tickets.filter((t) => t.status === 'Resolved').length, icon: CheckCircle2, tone: 'text-green-600' },
+  ]
 
   return (
-    <section className="pt-36 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
-          <div>
-            <div className="kicker mb-2">Client Portal</div>
-            <h1 className="display-font text-3xl md:text-4xl font-semibold text-fg">
-              Namaste, {client.name.split(' ')[0]}
-            </h1>
-          </div>
-          <form action={clientLogout}>
-            <button type="submit" className="btn-ghost !py-2 !px-4 text-xs">
-              <LogOut size={13} /> Logout
-            </button>
-          </form>
+    <main className="min-h-screen">
+      <PortalTopbar client={client} />
+
+      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
+        {/* Greeting */}
+        <div className="mb-7">
+          <h1 className="display-font text-2xl sm:text-3xl font-semibold text-fg">
+            Namaste, {client.name.split(' ')[0]} 👋
+          </h1>
+          <p className="text-fg/45 text-sm mt-1">
+            Yahan se apni koi bhi problem ya request raise karein — hum turant dekhenge.
+          </p>
         </div>
-        <p className="text-fg/45 text-sm mb-10 flex flex-wrap items-center gap-x-5 gap-y-1">
-          <span className="inline-flex items-center gap-1.5"><User2 size={13} /> {client.email}</span>
-          <span className="inline-flex items-center gap-1.5"><Inbox size={13} /> {open} open</span>
-          <span className="inline-flex items-center gap-1.5"><Clock size={13} /> {resolved} resolved</span>
-        </p>
 
-        <div className="grid lg:grid-cols-[1fr_1.1fr] gap-6 items-start">
-          {/* Raise */}
-          <RaiseTicketForm categories={categories} />
+        {/* Stat cards */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-9">
+          {stats.map((s) => (
+            <div key={s.label} className="glass-card p-4 sm:p-5">
+              <s.icon size={18} className={`${s.tone} mb-2`} />
+              <div className="display-font text-2xl sm:text-3xl font-bold text-fg leading-none">{s.value}</div>
+              <div className="mono-font text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-fg/40 mt-1.5">
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Track */}
-          <div>
-            <h2 className="display-font text-xl font-semibold text-fg mb-5">Aapke tickets</h2>
-            {tickets.length === 0 ? (
-              <div className="glass-card p-6 text-fg/45 text-sm">
-                Abhi koi ticket nahi. Left side se apna pehla ticket raise karein.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {tickets.map((t) => (
-                  <div key={t.id} className="glass-card p-5">
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="min-w-0">
-                        <span className="mono-font text-[10px] text-fg/35">#{t.ticket_no}</span>
-                        <h3 className="display-font font-semibold text-fg text-sm leading-snug">
-                          {t.subject}
-                        </h3>
-                      </div>
-                      <StatusBadge status={t.status} />
-                    </div>
-                    <p className="text-fg/50 text-xs leading-relaxed mb-3">{t.description}</p>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-fg/40 mono-font">
-                      <span>{t.category}</span>
-                      <span>·</span>
-                      <span>{t.priority} priority</span>
-                      <span>·</span>
-                      <span>Raised {fmt(t.created_at)}</span>
-                      {t.assigned_to && (
-                        <>
-                          <span>·</span>
-                          <span>Assigned: {t.assigned_to}</span>
-                        </>
-                      )}
-                    </div>
-                    {t.status === 'Resolved' && t.resolution && (
-                      <p className="mt-3 pt-3 border-t border-fg/[0.08] text-fg/60 text-xs leading-relaxed">
-                        <span className="text-green-600 font-semibold">Resolved:</span> {t.resolution}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Raise + Track */}
+        <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-6 items-start">
+          <div className="lg:sticky lg:top-24">
+            <RaiseTicketForm categories={categories} />
           </div>
+          <TicketList tickets={tickets} />
         </div>
       </div>
-    </section>
+    </main>
   )
 }

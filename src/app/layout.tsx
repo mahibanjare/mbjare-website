@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Fraunces, Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import SiteChrome from '@/components/layout/SiteChrome'
 import { MotionProvider } from '@/components/motion'
 import ScrollProgress from '@/components/ui/ScrollProgress'
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat'
@@ -78,11 +79,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <MotionProvider>
-          <ScrollProgress />
-          <Navbar />
+          <SiteChrome>
+            <ScrollProgress />
+            <Navbar />
+          </SiteChrome>
           <main className="relative">{children}</main>
-          <Footer />
-          <WhatsAppFloat />
+          <SiteChrome>
+            <Footer />
+            <WhatsAppFloat />
+          </SiteChrome>
         </MotionProvider>
       </body>
     </html>
