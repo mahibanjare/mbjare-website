@@ -1,12 +1,15 @@
 /** Field definitions for the admin panel forms — plain data, safe to import anywhere. */
 
-export type FieldType = 'text' | 'textarea' | 'lines' | 'json' | 'number'
+export type FieldType = 'text' | 'textarea' | 'lines' | 'json' | 'number' | 'image'
 
 export interface Field {
   key: string
   label: string
   type: FieldType
   hint?: string
+  /** When set, this field edits parent[subKey] inside a jsonb column instead of a top-level column */
+  parent?: string
+  subKey?: string
 }
 
 export interface Collection {
@@ -14,6 +17,10 @@ export interface Collection {
   title: string
   labelField: string
   fields: Field[]
+  /** PostgREST order clause for the admin list (default: sort.asc.nullslast) */
+  order?: string
+  /** Hide the "Add" button (rows created elsewhere, e.g. tickets by clients) */
+  noCreate?: boolean
 }
 
 const sort: Field = { key: 'sort', label: 'Order (chhota number pehle)', type: 'number' }
@@ -35,7 +42,7 @@ export const collections: Collection[] = [
       { key: 'timeline', label: 'Timeline', type: 'text' },
       { key: 'badge', label: 'Badge (optional: AI / POPULAR / NEW)', type: 'text' },
       { key: 'related', label: 'Related service slugs (ek line = ek slug)', type: 'lines' },
-      { key: 'image', label: 'Image URL (optional)', type: 'text' },
+      { key: 'image', label: 'Image (optional — service page pe dikhegi)', type: 'image' },
     ],
   },
   {
@@ -55,7 +62,10 @@ export const collections: Collection[] = [
       { key: 'priceNote', label: 'Price note (optional)', type: 'text' },
       { key: 'timeline', label: 'Timeline', type: 'text' },
       { key: 'badge', label: 'Badge (optional: FLAGSHIP / AI / NEW BUSINESS)', type: 'text' },
-      { key: 'proof', label: 'Proof (JSON: client, url, image, note)', type: 'json' },
+      { key: 'proof_client', parent: 'proof', subKey: 'client', label: 'Proof — client ka naam', type: 'text' },
+      { key: 'proof_url', parent: 'proof', subKey: 'url', label: 'Proof — live site URL', type: 'text' },
+      { key: 'proof_image', parent: 'proof', subKey: 'image', label: 'Proof — screenshot', type: 'image' },
+      { key: 'proof_note', parent: 'proof', subKey: 'note', label: 'Proof — ek line note', type: 'text' },
       { key: 'services', label: 'Bundled service slugs (ek line = ek slug)', type: 'lines' },
     ],
   },
@@ -72,7 +82,7 @@ export const collections: Collection[] = [
       { key: 'deliverables', label: 'Deliverables (ek line = ek item)', type: 'lines' },
       { key: 'tags', label: 'Tags (ek line = ek tag)', type: 'lines' },
       { key: 'year', label: 'Year', type: 'text' },
-      { key: 'image', label: 'Screenshot path (e.g. /projects/name.png)', type: 'text' },
+      { key: 'image', label: 'Screenshot (upload ya /projects/name.png path)', type: 'image' },
     ],
   },
   {
@@ -95,6 +105,36 @@ export const collections: Collection[] = [
       sort,
       { key: 'q', label: 'Question', type: 'text' },
       { key: 'a', label: 'Answer', type: 'textarea' },
+    ],
+  },
+  {
+    table: 'mbjare_clients',
+    title: 'Clients',
+    labelField: 'name',
+    fields: [
+      sort,
+      { key: 'name', label: 'Client ka naam', type: 'text' },
+      { key: 'company', label: 'Company (optional)', type: 'text' },
+      { key: 'email', label: 'Login email', type: 'text' },
+      { key: 'password', label: 'Login password', type: 'text', hint: 'client ko yahi email + password dena' },
+      { key: 'active', label: 'Active? (true / false)', type: 'text', hint: 'false = login band' },
+    ],
+  },
+  {
+    table: 'mbjare_tickets',
+    title: 'Tickets',
+    labelField: 'subject',
+    order: 'created_at.desc',
+    noCreate: true,
+    fields: [
+      { key: 'status', label: 'Status (Open / In Progress / Resolved)', type: 'text' },
+      { key: 'assigned_to', label: 'Assigned to (team member ka naam)', type: 'text' },
+      { key: 'resolution', label: 'Resolution note (resolve karne pe likhein)', type: 'textarea' },
+      { key: 'priority', label: 'Priority (Low / Medium / High)', type: 'text' },
+      { key: 'client_name', label: 'Client', type: 'text' },
+      { key: 'category', label: 'Category', type: 'text' },
+      { key: 'subject', label: 'Subject', type: 'text' },
+      { key: 'description', label: 'Description', type: 'textarea' },
     ],
   },
 ]

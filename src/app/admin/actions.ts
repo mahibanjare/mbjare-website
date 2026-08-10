@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { revalidateTag } from 'next/cache'
-import { sbUpsert, sbDelete } from '@/lib/supabase'
+import { sbUpsert, sbDelete, sbUploadImage } from '@/lib/supabase'
 import { tableWhitelist } from '@/lib/adminSchema'
 
 const COOKIE = 'mb_admin'
@@ -57,4 +57,15 @@ export async function deleteRow(table: string, id: string): Promise<string | nul
   const err = await sbDelete(table, id)
   if (!err) revalidateTag('content', 'max')
   return err
+}
+
+export async function uploadImage(
+  formData: FormData,
+): Promise<{ url: string } | { error: string }> {
+  if (!(await isAdmin())) return { error: 'Not authorized' }
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) return { error: 'Koi file select nahi hui' }
+  if (file.size > 8 * 1024 * 1024) return { error: 'File 8 MB se badi hai — chhoti image use karo' }
+  if (!file.type.startsWith('image/')) return { error: 'Sirf image files upload ho sakti hain' }
+  return sbUploadImage(file)
 }

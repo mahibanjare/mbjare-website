@@ -60,7 +60,7 @@ export default async function AdminPage() {
   const data: Record<string, Record<string, unknown>[]> = {}
   await Promise.all(
     collections.map(async (c) => {
-      data[c.table] = ((await sbSelectAdmin<Record<string, unknown>>(c.table)) ?? []) as Record<
+      data[c.table] = ((await sbSelectAdmin<Record<string, unknown>>(c.table, c.order)) ?? []) as Record<
         string,
         unknown
       >[]

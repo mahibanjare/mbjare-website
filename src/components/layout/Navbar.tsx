@@ -53,7 +53,7 @@ export default function Navbar() {
               width={64}
               height={64}
               priority
-              className="logo-glow transition-transform duration-300 group-hover:scale-105"
+              className="logo-glow logo-reveal transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
 

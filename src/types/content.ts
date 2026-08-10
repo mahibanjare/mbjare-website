@@ -33,6 +33,30 @@ export interface GrowthPackage {
   services: string[]
 }
 
+export interface Client {
+  id: string
+  name: string
+  company: string
+  email: string
+  active: boolean
+}
+
+export interface Ticket {
+  id: string
+  ticket_no: number
+  client_id: string
+  client_name: string
+  subject: string
+  category: string
+  priority: 'Low' | 'Medium' | 'High'
+  description: string
+  status: 'Open' | 'In Progress' | 'Resolved'
+  assigned_to: string
+  resolution: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Project {
   title: string
   url?: string

@@ -88,6 +88,7 @@ export default async function Footer() {
             <Link href="/about" className="hover:text-accent-2 transition-colors">About</Link>
             <Link href="/faq" className="hover:text-accent-2 transition-colors">FAQ</Link>
             <Link href="/contact" className="hover:text-accent-2 transition-colors">Contact</Link>
+            <Link href="/portal" className="hover:text-accent-2 transition-colors">Client Login</Link>
           </div>
           <span className="mono-font uppercase tracking-widest">Build. Automate. Grow.</span>
         </div>

@@ -36,14 +36,14 @@ export default function FounderNote() {
 
             {/* Handwritten sign-off */}
             <div className={`${signature.className} text-[38px] leading-none text-gold-b -rotate-2 mt-9`}>
-              Mahi Banjare
+              Mahendra Banjare
             </div>
 
             <div className="flex items-center gap-4 mt-6 pt-7 border-t border-fg/[0.08]">
               {founderPhoto ? (
                 <Image
                   src={founderPhoto}
-                  alt="Mahi Banjare — Founder, Mbjare InfoTech"
+                  alt="Mahendra Banjare — Founder, Mbjare InfoTech"
                   width={48}
                   height={48}
                   className="w-12 h-12 rounded-full object-cover shrink-0 ring-1 ring-gold/40"
@@ -52,7 +52,7 @@ export default function FounderNote() {
                 <span className="avatar-ring w-12 h-12 text-sm shrink-0">MB</span>
               )}
               <div>
-                <div className="text-fg font-semibold">Mahi Banjare — Founder</div>
+                <div className="text-fg font-semibold">Mahendra Banjare — Founder</div>
                 <div className="mono-font text-[11px] uppercase tracking-widest text-fg/35 mt-0.5">
                   Mbjare InfoTech · {site.location}
                 </div>

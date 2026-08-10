@@ -2,11 +2,19 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Pencil, Trash2, LogOut, X } from 'lucide-react'
-import { saveRow, deleteRow, logout } from '@/app/admin/actions'
+import { Plus, Pencil, Trash2, LogOut, X, Upload } from 'lucide-react'
+import { saveRow, deleteRow, logout, uploadImage } from '@/app/admin/actions'
 import type { Collection, Field } from '@/lib/adminSchema'
 
 type Row = Record<string, unknown> & { id?: string }
+
+function getValue(field: Field, row: Row): unknown {
+  if (field.parent) {
+    const p = row[field.parent]
+    return p && typeof p === 'object' ? (p as Record<string, unknown>)[field.subKey!] : undefined
+  }
+  return row[field.key]
+}
 
 function toInput(field: Field, value: unknown): string {
   if (value === null || value === undefined) return ''
@@ -27,6 +35,50 @@ function fromInput(field: Field, raw: string): unknown {
   }
   if (field.type === 'number') return v ? Number(v) : 0
   return v || null
+}
+
+function ImageField({ field, initial }: { field: Field; initial: string }) {
+  const [url, setUrl] = useState(initial)
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    setErr('')
+    setBusy(true)
+    const fd = new FormData()
+    fd.append('file', file)
+    const res = await uploadImage(fd)
+    setBusy(false)
+    if ('error' in res) setErr(res.error)
+    else setUrl(res.url)
+  }
+
+  return (
+    <div>
+      <div className="flex gap-2">
+        <input
+          name={field.key}
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder={field.hint ?? 'URL ya upload karo →'}
+          className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
+        />
+        <label className={`btn-ghost !py-2 !px-4 text-xs cursor-pointer shrink-0 ${busy ? 'opacity-50 pointer-events-none' : ''}`}>
+          <Upload size={13} /> {busy ? 'Uploading…' : 'Upload'}
+          <input type="file" accept="image/*" onChange={onFile} className="hidden" />
+        </label>
+      </div>
+      {err && <p className="text-red-600 text-xs mt-2">{err}</p>}
+      {url && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={url} alt="Preview" className="mt-3 h-20 rounded-lg border border-fg/10 object-cover" />
+      )}
+    </div>
+  )
 }
 
 export default function AdminDashboard({
@@ -50,7 +102,16 @@ export default function AdminDashboard({
     let payload: Row
     try {
       payload = { ...(editing?.id ? { id: editing.id } : {}) }
-      for (const f of col.fields) payload[f.key] = fromInput(f, String(form.get(f.key) ?? ''))
+      for (const f of col.fields) {
+        const val = fromInput(f, String(form.get(f.key) ?? ''))
+        if (f.parent) {
+          const obj = (payload[f.parent] as Record<string, unknown> | undefined) ?? {}
+          obj[f.subKey!] = val ?? ''
+          payload[f.parent] = obj
+        } else {
+          payload[f.key] = val
+        }
+      }
     } catch (e) {
       setStatus((e as Error).message)
       return
@@ -126,11 +187,13 @@ export default function AdminDashboard({
                 <span className="mono-font text-[10px] uppercase tracking-[0.2em] text-fg/45 block mb-1.5">
                   {f.label}
                 </span>
-                {f.type === 'text' || f.type === 'number' ? (
+                {f.type === 'image' ? (
+                  <ImageField field={f} initial={toInput(f, getValue(f, editing))} />
+                ) : f.type === 'text' || f.type === 'number' ? (
                   <input
                     name={f.key}
                     type={f.type === 'number' ? 'number' : 'text'}
-                    defaultValue={toInput(f, editing[f.key])}
+                    defaultValue={toInput(f, getValue(f, editing))}
                     placeholder={f.hint}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent"
                   />
@@ -138,7 +201,7 @@ export default function AdminDashboard({
                   <textarea
                     name={f.key}
                     rows={f.type === 'json' ? 5 : 4}
-                    defaultValue={toInput(f, editing[f.key])}
+                    defaultValue={toInput(f, getValue(f, editing))}
                     placeholder={f.hint}
                     className={`w-full px-3.5 py-2.5 rounded-xl bg-bg border border-fg/15 text-fg text-sm focus:outline-none focus:border-accent ${f.type === 'json' ? 'mono-font text-xs' : ''}`}
                   />
@@ -156,25 +219,38 @@ export default function AdminDashboard({
           </div>
         </form>
       ) : (
-        <button type="button" onClick={() => setEditing({})} className="btn-primary !py-2.5 !px-5 text-sm mb-6">
-          <Plus size={15} /> Add {col.title.replace(/s$/, '')}
-        </button>
+        !col.noCreate && (
+          <button type="button" onClick={() => setEditing({})} className="btn-primary !py-2.5 !px-5 text-sm mb-6">
+            <Plus size={15} /> Add {col.title.replace(/s$/, '')}
+          </button>
+        )
       )}
 
       {/* Rows */}
       <div className="space-y-2.5 pb-24">
         {rows.length === 0 && (
           <p className="text-fg/40 text-sm">
-            Abhi koi row nahi — site checked-in content use kar rahi hai. &ldquo;Add&rdquo; se pehli entry banao.
+            {col.noCreate
+              ? 'Abhi koi ticket nahi aayi.'
+              : 'Abhi koi row nahi — site checked-in content use kar rahi hai. “Add” se pehli entry banao.'}
           </p>
         )}
         {rows.map((row) => (
           <div key={String(row.id)} className="glass-card px-5 py-3.5 flex items-center justify-between gap-4">
             <div className="min-w-0">
               <span className="text-fg text-sm font-medium truncate block">
+                {'ticket_no' in row ? `#${row.ticket_no} · ` : ''}
                 {String(row[col.labelField] ?? '(untitled)')}
               </span>
               {'slug' in row && <span className="mono-font text-[10px] text-fg/35">{String(row.slug)}</span>}
+              {'client_name' in row && (
+                <span className="mono-font text-[10px] text-fg/35">
+                  {String(row.status ?? '')} · {String(row.client_name ?? '')}
+                </span>
+              )}
+              {'email' in row && !('client_name' in row) && (
+                <span className="mono-font text-[10px] text-fg/35">{String(row.email ?? '')}</span>
+              )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <button

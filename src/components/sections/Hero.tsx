@@ -48,7 +48,7 @@ export default function Hero() {
 
         {/* Real work collage — right */}
         <div className="relative anim-rise anim-d2 pb-10 sm:pb-14">
-          <div className="shot-frame rotate-[1.5deg]">
+          <div className="shot-frame float-a">
             <div className="shot-bar" aria-hidden><i /><i /><i /></div>
             <Image
               src="/projects/dharshakti.png"
@@ -59,7 +59,7 @@ export default function Hero() {
               className="rounded-lg w-full h-auto"
             />
           </div>
-          <div className="shot-frame absolute -bottom-2 -left-4 sm:-left-8 w-[54%] rotate-[-2.5deg]">
+          <div className="shot-frame absolute -bottom-2 -left-4 sm:-left-8 w-[54%] float-b">
             <div className="shot-bar" aria-hidden><i /><i /><i /></div>
             <Image
               src="/projects/bpsgodhi.png"

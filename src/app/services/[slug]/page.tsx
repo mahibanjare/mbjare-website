@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CheckCircle2, ArrowRight, Clock, IndianRupee } from 'lucide-react'
@@ -100,6 +101,20 @@ export default async function ServicePage({
             <Link href="/contact" className="btn-primary">
               Get a Free Quote <ArrowRight size={16} />
             </Link>
+
+            {/* Owner-uploaded image (admin panel) — stock imagery stays hidden */}
+            {service.image && !service.image.includes('unsplash.com') && (
+              <div className="shot-frame max-w-2xl mt-12">
+                <div className="shot-bar" aria-hidden><i /><i /><i /></div>
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  width={860}
+                  height={480}
+                  className="rounded-lg w-full h-auto"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
