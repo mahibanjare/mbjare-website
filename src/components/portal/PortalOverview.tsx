@@ -62,57 +62,52 @@ export default function PortalOverview({
         </span>
       </div>
 
-      {/* Progress ring + stat tiles */}
-      <div className="grid lg:grid-cols-[auto_1fr] gap-4 mb-5">
-        {/* Ring card */}
-        <div className="glass-card p-6 flex items-center gap-5">
-          <div className="relative w-[92px] h-[92px] shrink-0">
-            <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
-              <circle cx="40" cy="40" r={R} fill="none" stroke="currentColor" strokeWidth="7" className="text-fg/10" />
-              <circle
-                cx="40"
-                cy="40"
-                r={R}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="7"
-                strokeLinecap="round"
-                className="text-green-500 ring-anim"
-                style={{ ['--circ' as string]: `${C}px`, strokeDasharray: `${pct * C} ${C}` }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="display-font text-xl font-bold text-fg leading-none">
-                {Math.round(pct * 100)}%
-              </span>
-              <span className="mono-font text-[8px] uppercase tracking-[0.15em] text-fg/40 mt-0.5">done</span>
+      {/* Stat tiles — always a clean 2-col (mobile) / 4-col (desktop) row */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
+        {tiles.map((s) => (
+          <div key={s.label} className="glass-card p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${s.ring} flex items-center justify-center shrink-0`}>
+              <s.icon size={17} className={s.tone} />
+            </div>
+            <div className="min-w-0">
+              <div className="display-font text-2xl font-bold text-fg leading-none">{s.value}</div>
+              <div className="mono-font text-[9px] uppercase tracking-[0.14em] text-fg/40 mt-1">{s.label}</div>
             </div>
           </div>
-          <div className="min-w-0">
-            <div className="mono-font text-[10px] uppercase tracking-[0.15em] text-fg/45 mb-1">Resolution rate</div>
-            <p className="text-fg text-sm leading-snug">
-              {total === 0
-                ? 'Abhi koi ticket nahi.'
-                : resolved === total
-                  ? 'Sab tickets resolved! 🎉'
-                  : `${resolved} of ${total} tickets resolved.`}
-            </p>
+        ))}
+      </div>
+
+      {/* Resolution ring — compact full-width bar */}
+      <div className="glass-card p-5 mb-5 flex items-center gap-5">
+        <div className="relative w-[76px] h-[76px] shrink-0">
+          <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
+            <circle cx="40" cy="40" r={R} fill="none" stroke="currentColor" strokeWidth="7" className="text-fg/10" />
+            <circle
+              cx="40"
+              cy="40"
+              r={R}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="7"
+              strokeLinecap="round"
+              className="text-green-500 ring-anim"
+              style={{ ['--circ' as string]: `${C}px`, strokeDasharray: `${pct * C} ${C}` }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="display-font text-lg font-bold text-fg leading-none">{Math.round(pct * 100)}%</span>
+            <span className="mono-font text-[8px] uppercase tracking-[0.15em] text-fg/40 mt-0.5">done</span>
           </div>
         </div>
-
-        {/* Stat tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          {tiles.map((s) => (
-            <div key={s.label} className="glass-card p-4 flex flex-col justify-between">
-              <div className={`w-9 h-9 rounded-xl ${s.ring} flex items-center justify-center mb-3`}>
-                <s.icon size={16} className={s.tone} />
-              </div>
-              <div>
-                <div className="display-font text-2xl font-bold text-fg leading-none">{s.value}</div>
-                <div className="mono-font text-[9px] uppercase tracking-[0.14em] text-fg/40 mt-1.5">{s.label}</div>
-              </div>
-            </div>
-          ))}
+        <div className="min-w-0">
+          <div className="mono-font text-[10px] uppercase tracking-[0.15em] text-fg/45 mb-1">Resolution rate</div>
+          <p className="text-fg text-sm leading-snug">
+            {total === 0
+              ? 'Abhi koi ticket nahi.'
+              : resolved === total
+                ? 'Sab tickets resolved! 🎉'
+                : `${resolved} of ${total} tickets resolved.`}
+          </p>
         </div>
       </div>
 
