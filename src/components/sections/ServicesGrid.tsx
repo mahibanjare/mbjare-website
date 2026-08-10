@@ -1,42 +1,45 @@
+import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { services } from '@/content/services'
+import { getServices } from '@/lib/content'
 import { FadeUp } from '@/components/motion'
-import Icon from '@/components/ui/Icon'
-import { SpotlightLink } from '@/components/ui/Spotlight'
 
-export default function ServicesGrid({ limit }: { limit?: number }) {
+/* Editorial numbered index — services as full-width rows, not cards. */
+export default async function ServicesGrid({ limit }: { limit?: number }) {
+  const services = await getServices()
   const list = limit ? services.slice(0, limit) : services
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="border-t border-fg/10">
       {list.map((s, i) => (
-        <FadeUp key={s.slug} index={i % 3}>
-          <SpotlightLink
+        <FadeUp key={s.slug}>
+          <Link
             href={`/services/${s.slug}`}
-            className="glass-card spotlight-card flex flex-col h-full group transition-transform duration-300 p-7"
+            className="group grid sm:grid-cols-[96px_1fr_auto] gap-3 sm:gap-8 sm:items-center py-8 sm:py-9 px-2 sm:px-4 border-b border-fg/10 transition-colors duration-300 hover:bg-bg-2"
           >
-            <div className="flex items-start justify-between mb-6">
-              <div className="icon-tile w-12 h-12 transition-all duration-300 group-hover:bg-accent group-hover:text-[#021014] group-hover:shadow-[0_8px_24px_var(--glow)]">
-                <Icon name={s.icon} size={20} />
-              </div>
-              {s.badge && (
-                <span className="mono-font text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-md border border-gold/40 text-gold">
-                  {s.badge}
-                </span>
-              )}
-            </div>
+            <span className="display-font italic text-fg/30 text-lg leading-none pt-1.5 sm:pt-0">
+              ( {String(i + 1).padStart(2, '0')} )
+            </span>
 
-            <h3 className="display-font font-semibold text-fg text-lg mb-2 transition-colors group-hover:text-accent-2">
-              {s.title}
-            </h3>
-            <p className="text-fg/40 text-sm leading-relaxed mb-6 flex-1">{s.desc}</p>
-            <div className="flex items-center justify-between text-xs pt-4 border-t border-fg/[0.06]">
-              <span className="mono-font text-fg/35">{s.price}</span>
-              <span className="flex items-center gap-1 font-medium text-accent-2 group-hover:gap-2 transition-all">
-                Details
-                <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <span className="min-w-0">
+              <span className="flex items-center gap-3 flex-wrap">
+                <h3 className="display-font text-2xl md:text-[32px] font-semibold text-fg leading-snug transition-colors group-hover:text-accent">
+                  {s.title}
+                </h3>
+                {s.badge && (
+                  <span className="mono-font text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 rounded-md border border-gold/40 text-gold">
+                    {s.badge}
+                  </span>
+                )}
               </span>
-            </div>
-          </SpotlightLink>
+              <p className="text-fg/45 text-sm leading-relaxed max-w-2xl mt-2">{s.desc}</p>
+            </span>
+
+            <span className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 sm:gap-3">
+              <span className="mono-font text-xs text-fg/50 whitespace-nowrap">{s.price}</span>
+              <span className="w-10 h-10 rounded-full border border-fg/15 flex items-center justify-center text-fg/40 transition-all duration-300 group-hover:bg-accent group-hover:border-accent group-hover:text-[#fffdf8]">
+                <ArrowUpRight size={16} />
+              </span>
+            </span>
+          </Link>
         </FadeUp>
       ))}
     </div>

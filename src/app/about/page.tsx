@@ -106,8 +106,13 @@ export default function AboutPage() {
             {team.map((member, i) => (
               <FadeUp key={member.name} index={i}>
                 <div className="glass-card p-6 text-center h-full">
-                  <div className="w-16 h-16 rounded-2xl bg-fg/[0.04] border border-fg/10 flex items-center justify-center mx-auto mb-4 text-4xl">
-                    {member.emoji}
+                  <div className="avatar-ring w-16 h-16 mx-auto mb-4 display-font text-xl">
+                    {member.name
+                      .split(' ')
+                      .filter((w) => /^[A-Za-z]/.test(w))
+                      .slice(0, 2)
+                      .map((w) => w[0])
+                      .join('')}
                   </div>
                   <h3 className="display-font font-bold text-fg text-base mb-1">{member.name}</h3>
                   <div className="mono-font text-[10px] uppercase tracking-widest text-fg/40 mb-3">{member.role}</div>

@@ -39,7 +39,7 @@ export default function CTA() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/contact" className="btn-primary">
-              Get Your Free Quote <ArrowRight size={16} />
+              Book a Free Call <ArrowRight size={16} />
             </Link>
             <a
               href={site.whatsapp}

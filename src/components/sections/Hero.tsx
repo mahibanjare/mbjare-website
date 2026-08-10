@@ -1,79 +1,101 @@
 import Link from 'next/link'
-import { ArrowRight, MessageSquare, ChevronDown } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, MessageSquare } from 'lucide-react'
 import { site } from '@/content/site'
 
-const trustedBy = ['Dharshakti Sweets', 'SR Petrochemicals', 'Bright Public School Godhi', 'Ankita Beauty Salon', 'Grafiya']
+const trustedBy = [
+  { name: 'Dharshakti Sweets', url: 'https://dharshakti.in' },
+  { name: 'SR Petrochemicals', url: 'https://srpetrochemicals.in' },
+  { name: 'Bright Public School Godhi', url: 'https://bpsgodhi.in' },
+  { name: 'Ankita Beauty Salon', url: 'https://ankitabeautysalonarang.in' },
+  { name: 'Grafiya', url: 'https://grafiya.in' },
+]
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center hero-glow overflow-hidden">
-      {/* ds-style dotted grid, fading downward */}
-      <div className="absolute inset-0 opacity-40 dot-grid" aria-hidden />
+    <section className="relative overflow-hidden hero-glow">
+      <div className="max-w-7xl mx-auto px-6 pt-40 pb-16 lg:pt-44 grid lg:grid-cols-[1.05fr_0.95fr] gap-16 lg:gap-12 items-center">
+        {/* Editorial copy — left */}
+        <div>
+          <div className="est-line w-fit mb-8 anim-rise">
+            Digital Studio — Raipur, India
+          </div>
 
-      {/* Floating aurora orbs — pure CSS, GPU-composited */}
-      <div className="orb orb-1" aria-hidden />
-      <div className="orb orb-2" aria-hidden />
+          <h1 className="display-font text-[clamp(2.6rem,5.5vw,72px)] font-semibold leading-[1.06] mb-7 anim-rise anim-d1">
+            We build brands, websites &amp; automations{' '}
+            <span className="text-outline">that grow real businesses.</span>
+          </h1>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-36 pb-24">
-        {/* Gold eyebrow — the only gold in the hero */}
-        <div className="est-line mx-auto w-fit mb-8 anim-rise">
-          India&apos;s AI-First Digital Agency
+          <p className="text-fg/55 text-lg max-w-lg mb-6 leading-relaxed anim-rise anim-d2">
+            Every brand on this page was designed, built and is run end-to-end by
+            us — and it&apos;s all <span className="text-fg font-medium">live on the internet</span>,
+            rated 5★ by every client.
+          </p>
+
+          <p className="mono-font text-[11px] uppercase tracking-[0.25em] text-fg/40 mb-10 anim-rise anim-d2">
+            5 brands built end-to-end&ensp;·&ensp;5★ from every client&ensp;·&ensp;2-hour replies
+          </p>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 anim-rise anim-d3">
+            <Link href="/contact" className="btn-primary">
+              Book a Free Call <ArrowRight size={16} />
+            </Link>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-ghost">
+              <MessageSquare size={15} /> WhatsApp Us
+            </a>
+          </div>
         </div>
 
-        <h1 className="display-font text-[clamp(2.8rem,7.5vw,86px)] font-bold leading-[1.04] tracking-[-0.03em] mb-8 anim-rise anim-d1">
-          <span className="text-fg">We Build </span>
-          <span className="text-gradient-anim">AI-Powered</span>
-          <br />
-          <span className="text-outline">Digital Engines</span>
-          <br />
-          <span className="text-fg">That Grow Your Business</span>
-        </h1>
-
-        <p className="text-fg/45 text-lg md:text-xl max-w-xl mx-auto mb-6 leading-relaxed anim-rise anim-d2">
-          Websites, apps, AI chatbots &amp; automations that{' '}
-          <span className="text-fg font-medium">work while you sleep</span> — built
-          end-to-end, rated 5★ by every client.
-        </p>
-
-        {/* Quiet proof line — one voice, no competing chips */}
-        <p className="mono-font text-[11px] uppercase tracking-[0.25em] text-fg/35 mb-12 anim-rise anim-d2">
-          5 brands built end-to-end&ensp;·&ensp;5★ from every client&ensp;·&ensp;2-hour replies
-        </p>
-
-        {/* One primary action. One quiet alternative. */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 anim-rise anim-d3">
-          <Link href="/contact" className="btn-primary">
-            Start Your Project — It&apos;s Free <ArrowRight size={16} />
-          </Link>
-          <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-            <MessageSquare size={15} /> WhatsApp Us
-          </a>
-        </div>
-
-        {/* Trust strip — quiet, editorial */}
-        <div className="mt-20 anim-rise anim-d4">
-          <div className="mono-font text-[10px] uppercase tracking-[0.35em] text-fg/30 mb-6">
-            Brands we&apos;ve built — live on the internet
+        {/* Real work collage — right */}
+        <div className="relative anim-rise anim-d2 pb-10 sm:pb-14">
+          <div className="shot-frame rotate-[1.5deg]">
+            <div className="shot-bar" aria-hidden><i /><i /><i /></div>
+            <Image
+              src="/projects/dharshakti.png"
+              alt="Dharshakti Sweets & Restaurant — live client website with QR ordering"
+              width={680}
+              height={425}
+              priority
+              className="rounded-lg w-full h-auto"
+            />
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-            {trustedBy.map((name) => (
-              <span
-                key={name}
-                className="display-font text-sm font-semibold text-fg/40 hover:text-fg transition-colors duration-300"
-              >
-                {name}
-              </span>
-            ))}
+          <div className="shot-frame absolute -bottom-2 -left-4 sm:-left-8 w-[54%] rotate-[-2.5deg]">
+            <div className="shot-bar" aria-hidden><i /><i /><i /></div>
+            <Image
+              src="/projects/bpsgodhi.png"
+              alt="Bright Public School Godhi — live client website"
+              width={380}
+              height={238}
+              priority
+              className="rounded-md w-full h-auto"
+            />
           </div>
+          <span className="absolute -top-3 right-5 mono-font text-[9px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-gold/50 text-gold bg-bg-2 shadow-sm">
+            Live — dharshakti.in
+          </span>
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="absolute bottom-7 left-1/2 -translate-x-1/2 anim-rise anim-d4">
-        <ChevronDown size={18} className="text-fg/30 scroll-cue" />
+      {/* Trust strip — client names, editorial serif */}
+      <div className="max-w-7xl mx-auto px-6 pb-16 anim-rise anim-d4">
+        <div className="mono-font text-[10px] uppercase tracking-[0.35em] text-fg/35 mb-5">
+          Brands we&apos;ve built — live on the internet
+        </div>
+        <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
+          {trustedBy.map((c) => (
+            <a
+              key={c.name}
+              href={c.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="display-font italic text-base text-fg/45 hover:text-accent transition-colors duration-300"
+            >
+              {c.name}
+            </a>
+          ))}
+        </div>
       </div>
 
-      {/* Bottom hairline */}
       <div className="absolute bottom-0 left-0 right-0 hairline" />
     </section>
   )

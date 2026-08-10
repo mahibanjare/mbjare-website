@@ -1,16 +1,16 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CheckCircle2, ArrowRight, Clock, IndianRupee } from 'lucide-react'
-import { services, getService } from '@/content/services'
+import { services as localServices } from '@/content/services'
+import { getServices, getService, getRelatedServices } from '@/lib/content'
 import { breadcrumbSchema, graph, serviceSchema } from '@/lib/seo'
 import CTA from '@/components/sections/CTA'
 import Icon from '@/components/ui/Icon'
 import { FadeUp } from '@/components/motion'
 
 export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }))
+  return localServices.map((s) => ({ slug: s.slug }))
 }
 
 export async function generateMetadata({
@@ -19,7 +19,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const service = getService(slug)
+  const service = await getService(slug)
   if (!service) return {}
   return {
     title: `${service.title} — ${service.price}`,
@@ -34,8 +34,13 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const service = getService(slug)
+  const service = await getService(slug)
   if (!service) notFound()
+
+  const [related, allServices] = await Promise.all([
+    getRelatedServices(service),
+    getServices(),
+  ])
 
   const jsonLd = graph(
     serviceSchema(service),
@@ -56,28 +61,16 @@ export default async function ServicePage({
       <section className="pt-40 pb-20 hero-glow">
         <div className="max-w-5xl mx-auto px-6">
           <div className="anim-rise">
-            {/* Premium hero banner */}
-            <div className="relative h-56 sm:h-72 rounded-3xl overflow-hidden mb-8 glass-card">
-              <Image
-                src={service.image}
-                alt={service.title}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 1024px"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
-              <div className="absolute inset-0 bg-accent/12 mix-blend-multiply" />
-              <div className="absolute bottom-5 left-5 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-bg/70 backdrop-blur-md border border-accent-3/25 flex items-center justify-center text-accent-2">
-                  <Icon name={service.icon} size={24} />
-                </div>
-                {service.badge && (
-                  <span className="mono-font text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-accent-3/25 text-accent-2 bg-bg/70 backdrop-blur-md">
-                    {service.badge}
-                  </span>
-                )}
+            {/* Editorial typographic hero — no stock imagery */}
+            <div className="flex items-center gap-4 mb-8">
+              <div className="icon-tile w-14 h-14">
+                <Icon name={service.icon} size={24} />
               </div>
+              {service.badge && (
+                <span className="mono-font text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-gold/40 text-gold">
+                  {service.badge}
+                </span>
+              )}
             </div>
             <h1 className="display-font text-[clamp(2.4rem,5.5vw,64px)] font-bold text-fg leading-tight mb-4">
               {service.title}
@@ -131,13 +124,35 @@ export default async function ServicePage({
         </div>
       </section>
 
-      {/* Other services */}
+      {/* Related services */}
       <section className="py-20 border-t border-fg/[0.06]">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="display-font text-2xl font-bold text-fg mb-8">Explore other services</h2>
+          <h2 className="display-font text-2xl font-bold text-fg mb-3">Works great with</h2>
+          <p className="text-fg/40 text-sm mb-8">
+            Most clients combine {service.title.toLowerCase()} with these:
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+            {related.map((s) => (
+              <Link
+                key={s.slug}
+                href={`/services/${s.slug}`}
+                className="glass-card p-5 group transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <div className="flex items-center gap-3 mb-2.5">
+                  <div className="icon-tile w-9 h-9">
+                    <Icon name={s.icon} size={16} />
+                  </div>
+                  <span className="display-font font-semibold text-fg text-sm group-hover:text-accent-2 transition-colors">
+                    {s.title}
+                  </span>
+                </div>
+                <p className="text-fg/40 text-xs leading-relaxed line-clamp-2">{s.desc}</p>
+              </Link>
+            ))}
+          </div>
           <div className="flex flex-wrap gap-3">
-            {services
-              .filter((s) => s.slug !== service.slug)
+            {allServices
+              .filter((s) => s.slug !== service.slug && !(service.related ?? []).includes(s.slug))
               .map((s) => (
                 <Link
                   key={s.slug}

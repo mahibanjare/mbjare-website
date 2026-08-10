@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MessageSquare, Mail, Phone, MapPin, Clock, ArrowRight } from 'lucide-react'
 import ContactForm from '@/components/forms/ContactForm'
-import { site, faqs } from '@/content/site'
+import { site } from '@/content/site'
+import { getFaqs } from '@/lib/content'
 import { FadeUp } from '@/components/motion'
 
 export const metadata: Metadata = {
@@ -18,7 +19,8 @@ const channels = [
   { href: site.phoneHref, icon: Phone, title: 'Call Us', sub: site.hours, val: site.phone },
 ]
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const faqs = await getFaqs()
   return (
     <>
       <section className="pt-40 pb-12 hero-glow">

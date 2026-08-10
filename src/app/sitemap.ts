@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next'
-import { services } from '@/content/services'
+import { getServices } from '@/lib/content'
 import { site } from '@/content/site'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const services = await getServices()
   const lastModified = new Date()
 
   const staticPages = ['', '/services', '/portfolio', '/about', '/faq', '/contact'].map((path) => ({

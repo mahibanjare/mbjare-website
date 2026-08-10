@@ -80,7 +80,7 @@ export default function Navbar() {
               Available
             </span>
             <Link href="/contact" className="btn-primary !py-2.5 !px-5 text-xs">
-              Get Free Quote <ArrowUpRight size={14} />
+              Book a Call <ArrowUpRight size={14} />
             </Link>
           </div>
 
@@ -118,7 +118,7 @@ export default function Navbar() {
           </Link>
         ))}
         <Link href="/contact" className="btn-primary mt-4">
-          Get Free Quote <ArrowUpRight size={15} />
+          Book a Free Call <ArrowUpRight size={15} />
         </Link>
         <div className="flex items-center gap-2 text-fg/30 text-xs mt-2">
           <span className="teal-dot w-1.5 h-1.5" /> Open for new projects

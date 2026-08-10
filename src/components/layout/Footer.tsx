@@ -3,10 +3,11 @@ import Image from 'next/image'
 import { Phone, Mail, MapPin, ArrowUpRight } from 'lucide-react'
 import SocialIcon from '@/components/ui/SocialIcon'
 import { site } from '@/content/site'
-import { services } from '@/content/services'
+import { getServices } from '@/lib/content'
 import NewsletterForm from '@/components/forms/NewsletterForm'
 
-export default function Footer() {
+export default async function Footer() {
+  const services = await getServices()
   return (
     <footer className="footer-anchor relative mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16">

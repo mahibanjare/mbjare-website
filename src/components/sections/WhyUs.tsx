@@ -38,7 +38,7 @@ export default function WhyUs() {
       <div className="max-w-7xl mx-auto px-6">
         <FadeUp className="text-center max-w-2xl mx-auto mb-16">
           <div className="kicker mb-4 mx-auto w-fit">02 · Why Mbjare</div>
-          <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
+          <h2 className="display-font text-4xl md:text-6xl font-semibold text-fg">
             Why real businesses <span className="text-outline">choose us</span> — and stay
           </h2>
           <p className="text-fg/45 text-lg mt-5">
@@ -70,7 +70,7 @@ export default function WhyUs() {
               <div className="hero-glow absolute inset-0 opacity-40" aria-hidden />
               <div className="relative">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-accent text-[#021014] flex items-center justify-center shadow-[0_8px_24px_var(--glow)]">
+                  <div className="w-12 h-12 rounded-2xl bg-accent text-[#fffdf8] flex items-center justify-center shadow-[0_8px_24px_var(--glow)]">
                     <ShieldCheck size={24} />
                   </div>
                   <div>

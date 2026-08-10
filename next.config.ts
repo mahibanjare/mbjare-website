@@ -6,6 +6,22 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },
+  async redirects() {
+    // Old standalone service pages merged into /services/business-automation
+    const merged = [
+      'ai-chatbots-agents',
+      'ai-workflow-automation',
+      'whatsapp-automation',
+      'google-sheet-automation',
+      'email-automation',
+      'data-dashboards',
+    ];
+    return merged.map((slug) => ({
+      source: `/services/${slug}`,
+      destination: '/services/business-automation',
+      permanent: true,
+    }));
+  },
 };
 
 export default nextConfig;

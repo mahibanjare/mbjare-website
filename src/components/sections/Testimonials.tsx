@@ -1,5 +1,6 @@
 import { Star, Quote } from 'lucide-react'
-import { testimonials } from '@/content/testimonials'
+import type { Testimonial } from '@/types/content'
+import { getTestimonials } from '@/lib/content'
 import { FadeUp } from '@/components/motion'
 
 function initials(name: string) {
@@ -11,7 +12,7 @@ function initials(name: string) {
     .toUpperCase()
 }
 
-function Card({ t }: { t: (typeof testimonials)[number] }) {
+function Card({ t }: { t: Testimonial }) {
   return (
     <div className="glass-card p-6 w-[340px] flex-shrink-0 relative group">
       <Quote
@@ -24,7 +25,7 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
           <Star key={i} size={13} className="fill-gold text-gold" />
         ))}
       </div>
-      <p className="text-fg/60 text-sm leading-relaxed mb-6 italic">&ldquo;{t.msg}&rdquo;</p>
+      <p className="display-font italic text-fg/70 text-[15px] leading-relaxed mb-6">&ldquo;{t.msg}&rdquo;</p>
       <div className="flex items-center gap-3 pt-4 border-t border-fg/[0.06]">
         <span className="avatar-ring w-10 h-10 text-xs shrink-0">{initials(t.name)}</span>
         <div>
@@ -36,13 +37,14 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
   )
 }
 
-export default function Testimonials() {
+export default async function Testimonials() {
+  const testimonials = await getTestimonials()
   return (
     <section className="py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-12">
         <FadeUp>
           <div className="kicker mb-3">04 · Client Love</div>
-          <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
+          <h2 className="display-font text-4xl md:text-6xl font-semibold text-fg">
             Trusted by businesses <span className="text-outline">like yours</span>
           </h2>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-6">

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { faqs, site } from '@/content/site'
+import { site } from '@/content/site'
+import { getFaqs } from '@/lib/content'
 import { breadcrumbSchema, faqSchema, graph } from '@/lib/seo'
 import { FadeUp } from '@/components/motion'
 
@@ -12,15 +13,15 @@ export const metadata: Metadata = {
   alternates: { canonical: '/faq' },
 }
 
-const jsonLd = graph(
-  faqSchema(faqs),
-  breadcrumbSchema([
-    { name: 'Home', path: '/' },
-    { name: 'FAQ', path: '/faq' },
-  ]),
-)
-
-export default function FaqPage() {
+export default async function FaqPage() {
+  const faqs = await getFaqs()
+  const jsonLd = graph(
+    faqSchema(faqs),
+    breadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'FAQ', path: '/faq' },
+    ]),
+  )
   return (
     <>
       <script

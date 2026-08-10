@@ -2,10 +2,10 @@ import { FadeUp, Stagger } from '@/components/motion'
 import { SpotlightDiv } from '@/components/ui/Spotlight'
 
 const steps = [
-  { n: '01', title: 'Discover', desc: 'Free strategy call. We understand your business, goals, and where AI + automation can multiply results.' },
-  { n: '02', title: 'Design', desc: 'We map the solution — design, content, flows — and you approve before a single line of code ships.' },
-  { n: '03', title: 'Build', desc: 'Fast, focused sprints. Websites in 1–2 weeks, automations in days. You see progress in real time.' },
-  { n: '04', title: 'Grow', desc: 'Launch is day one. We optimize, automate, and iterate so your digital engine keeps compounding.' },
+  { n: '01', title: 'Discover', quote: 'Great work starts with listening.', desc: 'Free strategy call. We understand your business, goals, and where AI + automation can multiply results.' },
+  { n: '02', title: 'Design', quote: 'Strategy first. Pixels second.', desc: 'We map the solution — design, content, flows — and you approve before a single line of code ships.' },
+  { n: '03', title: 'Build', quote: 'Speed is a feature.', desc: 'Fast, focused sprints. Websites in 1–2 weeks, automations in days. You see progress in real time.' },
+  { n: '04', title: 'Grow', quote: 'Shipping is the start, not the end.', desc: 'Launch is day one. We optimize, automate, and iterate so your digital engine keeps compounding.' },
 ]
 
 export default function Process() {
@@ -14,7 +14,7 @@ export default function Process() {
       <div className="max-w-7xl mx-auto px-6">
         <FadeUp className="mb-14">
           <div className="kicker mb-3">03 · How We Work</div>
-          <h2 className="display-font text-4xl md:text-5xl font-bold text-fg">
+          <h2 className="display-font text-4xl md:text-6xl font-semibold text-fg">
             From idea to <span className="text-outline">impact</span> — in weeks
           </h2>
         </FadeUp>
@@ -37,9 +37,10 @@ export default function Process() {
               <SpotlightDiv className="glass-card spotlight-card p-7 pt-16 h-full group transition-transform duration-300">
                 {/* ds watermark step number — the card's single ornament */}
                 <span className="step-num" aria-hidden>{s.n}</span>
-                <h3 className="display-font text-lg font-semibold text-fg mb-3 transition-colors group-hover:text-accent-2">
+                <h3 className="display-font text-lg font-semibold text-fg mb-2 transition-colors group-hover:text-accent-2">
                   {s.title}
                 </h3>
+                <p className="display-font italic text-sm text-accent mb-3">&ldquo;{s.quote}&rdquo;</p>
                 <p className="text-fg/40 text-sm leading-relaxed">{s.desc}</p>
               </SpotlightDiv>
             </FadeUp>

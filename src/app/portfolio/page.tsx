@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
-import { projects } from '@/content/projects'
+import { getProjects } from '@/lib/content'
 import CTA from '@/components/sections/CTA'
 import { FadeUp } from '@/components/motion'
 
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/portfolio' },
 }
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const projects = await getProjects()
   return (
     <>
       <section className="pt-40 pb-16 hero-glow">

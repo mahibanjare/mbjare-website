@@ -1,5 +1,17 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import Image from 'next/image'
+import { Caveat } from 'next/font/google'
 import { FadeUp } from '@/components/motion'
 import { site } from '@/content/site'
+
+const signature = Caveat({ subsets: ['latin'], weight: '600', display: 'swap' })
+
+/* Drop a real photo at public/founder.png (or .jpg / .webp) and it
+   replaces the initials automatically — no code change needed. */
+const founderPhoto = ['founder.png', 'founder.jpg', 'founder.webp']
+  .map((f) => (fs.existsSync(path.join(process.cwd(), 'public', f)) ? `/${f}` : null))
+  .find(Boolean)
 
 export default function FounderNote() {
   return (
@@ -22,10 +34,25 @@ export default function FounderNote() {
               That&apos;s not a sales line. That&apos;s a promise.&rdquo;
             </blockquote>
 
-            <div className="flex items-center gap-4 mt-9 pt-7 border-t border-fg/[0.08]">
-              <span className="avatar-ring w-12 h-12 text-sm shrink-0">MB</span>
+            {/* Handwritten sign-off */}
+            <div className={`${signature.className} text-[38px] leading-none text-gold-b -rotate-2 mt-9`}>
+              Mahi Banjare
+            </div>
+
+            <div className="flex items-center gap-4 mt-6 pt-7 border-t border-fg/[0.08]">
+              {founderPhoto ? (
+                <Image
+                  src={founderPhoto}
+                  alt="Mahi Banjare — Founder, Mbjare InfoTech"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 rounded-full object-cover shrink-0 ring-1 ring-gold/40"
+                />
+              ) : (
+                <span className="avatar-ring w-12 h-12 text-sm shrink-0">MB</span>
+              )}
               <div>
-                <div className="text-fg font-semibold">Founder &amp; Team</div>
+                <div className="text-fg font-semibold">Mahi Banjare — Founder</div>
                 <div className="mono-font text-[11px] uppercase tracking-widest text-fg/35 mt-0.5">
                   Mbjare InfoTech · {site.location}
                 </div>

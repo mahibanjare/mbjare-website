@@ -188,11 +188,11 @@ const promiseStrip: Bi[] = [
 
 const pricing: { service: string; price: Bi; note: Bi }[] = [
   { service: 'Website Development', price: { en: 'from ₹9,999', hi: '₹9,999 से' }, note: { en: 'Live in 1–2 weeks', hi: '1–2 हफ्ते में live' } },
-  { service: 'WhatsApp Automation', price: { en: 'from ₹4,999', hi: '₹4,999 से' }, note: { en: 'Live in 3–5 days', hi: '3–5 दिन में live' } },
+  { service: 'Business Automation', price: { en: 'from ₹2,999', hi: '₹2,999 से' }, note: { en: 'Sheets · WhatsApp · Email · AI', hi: 'Sheets · WhatsApp · Email · AI' } },
   { service: 'Branding & Logo Design', price: { en: 'from ₹1,999', hi: '₹1,999 से' }, note: { en: 'Complete brand kit', hi: 'पूरा brand kit' } },
-  { service: 'Social Media Management', price: { en: 'from ₹5,999/mo', hi: '₹5,999/माह से' }, note: { en: 'Content + growth', hi: 'Content + growth' } },
+  { service: 'Social Media Management', price: { en: 'from ₹5,999/mo', hi: '₹5,999/माह से' }, note: { en: 'Posts + reels + growth', hi: 'Posts + reels + growth' } },
+  { service: 'Google Business Setup', price: { en: 'from ₹1,499', hi: '₹1,499 से' }, note: { en: 'Live in 1–2 days', hi: '1–2 दिन में live' } },
   { service: 'Meta Ads & Marketing', price: { en: 'from ₹4,999/mo', hi: '₹4,999/माह से' }, note: { en: '+ ad spend', hi: '+ ad spend' } },
-  { service: 'AI Chatbots & Agents', price: { en: 'custom', hi: 'आपके हिसाब से' }, note: { en: 'Free consult first', hi: 'पहले free सलाह' } },
 ]
 
 const steps: { n: string; title: Bi; desc: Bi }[] = [
@@ -703,7 +703,7 @@ export default function PitchDeck() {
                   onClick={() => setLang(l)}
                   aria-pressed={lang === l}
                   className={`px-3 h-7 rounded-full text-xs font-bold transition-all ${
-                    lang === l ? 'bg-accent text-[#021014]' : 'text-fg/50 hover:text-fg'
+                    lang === l ? 'bg-accent text-[#fffdf8]' : 'text-fg/50 hover:text-fg'
                   }`}
                 >
                   {l === 'en' ? 'EN' : 'हिं'}
@@ -790,7 +790,7 @@ export default function PitchDeck() {
               onClick={() => go(index + 1)}
               disabled={index === total - 1}
               aria-label="Next slide"
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-accent text-[#021014] hover:brightness-110 transition-all disabled:opacity-25 disabled:pointer-events-none shadow-[0_8px_24px_var(--glow)]"
+              className="w-11 h-11 flex items-center justify-center rounded-full bg-accent text-[#fffdf8] hover:brightness-110 transition-all disabled:opacity-25 disabled:pointer-events-none shadow-[0_8px_24px_var(--glow)]"
             >
               <ArrowRight size={17} />
             </button>
