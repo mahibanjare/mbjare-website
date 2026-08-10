@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation'
 import { Plus } from 'lucide-react'
 import { raiseTicket } from '@/app/portal/actions'
 
-export default function RaiseTicketForm({ categories }: { categories: string[] }) {
+export default function RaiseTicketForm({
+  categories,
+  onSuccess,
+}: {
+  categories: string[]
+  onSuccess?: () => void
+}) {
   const [state, action, pending] = useActionState(raiseTicket, undefined)
   const formRef = useRef<HTMLFormElement>(null)
   const router = useRouter()
@@ -14,8 +20,9 @@ export default function RaiseTicketForm({ categories }: { categories: string[] }
     if (state?.ok) {
       formRef.current?.reset()
       router.refresh()
+      onSuccess?.()
     }
-  }, [state, router])
+  }, [state, router, onSuccess])
 
   return (
     <form ref={formRef} action={action} className="glass-card p-6 md:p-7">

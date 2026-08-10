@@ -6,8 +6,7 @@ import { getClient, getMyTickets } from '@/app/portal/actions'
 import { getServices } from '@/lib/content'
 import { supabaseConfigured } from '@/lib/supabase'
 import ClientLogin from '@/components/portal/ClientLogin'
-import RaiseTicketForm from '@/components/portal/RaiseTicketForm'
-import TicketList from '@/components/portal/TicketList'
+import PortalDashboard from '@/components/portal/PortalDashboard'
 import PortalTopbar from '@/components/portal/PortalTopbar'
 
 export const metadata: Metadata = {
@@ -91,13 +90,8 @@ export default async function PortalPage() {
           ))}
         </div>
 
-        {/* Raise + Track */}
-        <div className="grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-6 items-start">
-          <div className="lg:sticky lg:top-24">
-            <RaiseTicketForm categories={categories} />
-          </div>
-          <TicketList tickets={tickets} />
-        </div>
+        {/* Sidebar tabs: My Tickets (table) · Raise Ticket (form) */}
+        <PortalDashboard tickets={tickets} categories={categories} />
       </div>
     </main>
   )
