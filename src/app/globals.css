@@ -59,6 +59,16 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+/* Mobile-safe grids: a grid whose columns are only set at a breakpoint
+   (e.g. `grid sm:grid-cols-2`) otherwise falls back to an `auto` track that
+   grows to max-content and clips cards on phones. This zero-specificity
+   default bounds it to one full-width column; any real `grid-cols-*`
+   utility (higher specificity) still wins at its breakpoint. */
+:where(.grid) {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 body {
