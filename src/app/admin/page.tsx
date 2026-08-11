@@ -7,7 +7,6 @@ import { collections } from '@/lib/adminSchema'
 import { sbSelectAdmin, supabaseConfigured } from '@/lib/supabase'
 import LoginForm from '@/components/admin/LoginForm'
 import AdminDashboard from '@/components/admin/AdminDashboard'
-import AdminTopbar from '@/components/admin/AdminTopbar'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -69,14 +68,7 @@ export default async function AdminPage() {
     }),
   )
 
-  return (
-    <main className="min-h-screen">
-      <AdminTopbar />
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
-        <AdminDashboard collections={collections} data={data} />
-      </div>
-    </main>
-  )
+  return <AdminDashboard collections={collections} data={data} />
 }
 
 function AuthShell({ heading, children }: { heading: string; children: React.ReactNode }) {
