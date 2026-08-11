@@ -43,16 +43,16 @@ export default function PortalApp({
       <aside className="md:w-64 lg:w-72 shrink-0 md:border-r border-fg/10 p-4 md:p-5 md:h-screen md:sticky md:top-0 md:overflow-y-auto bg-bg-2/40">
         {/* Brand card */}
         <div className="glass-card p-4 flex items-center gap-3 mb-4">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-white shadow-lg shrink-0">
+          <div className="brand-icon w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-lg shrink-0">
             <Building2 size={20} />
           </div>
           <div className="min-w-0">
             <div className="font-semibold text-fg text-sm truncate leading-tight">
               {client.company || client.name}
             </div>
-            <div className="text-xs text-blue-600 font-medium">Client</div>
+            <div className="text-xs text-accent font-medium">Client</div>
             <div className="inline-flex items-center gap-1.5 mt-1.5 text-[11px] text-fg/45">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> {tickets.length} Tickets
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" /> {tickets.length} Tickets
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function PortalApp({
                 aria-current={on ? 'page' : undefined}
                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all shrink-0 md:w-full ${
                   on
-                    ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-[0_10px_24px_-8px_rgba(79,70,229,0.6)]'
+                    ? 'brand-icon text-white shadow-[0_10px_24px_-8px_var(--glow)]'
                     : 'text-fg/60 hover:text-fg hover:bg-fg/[0.04]'
                 }`}
               >
@@ -89,7 +89,7 @@ export default function PortalApp({
           >
             <MessageSquare size={18} className="text-fg/45" />
             WhatsApp Support
-            <Sparkles size={14} className="ml-auto text-amber-500" />
+            <Sparkles size={14} className="ml-auto text-gold" />
           </a>
         </nav>
       </aside>
@@ -100,11 +100,11 @@ export default function PortalApp({
         <header className="sticky top-0 z-30 bg-bg/85 backdrop-blur-xl border-b border-fg/[0.08]">
           <div className="px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center text-white shadow-lg shrink-0">
+              <div className="brand-icon w-11 h-11 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0">
                 <LayoutDashboard size={20} />
               </div>
               <div className="min-w-0">
-                <h1 className="display-font text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent leading-tight">
+                <h1 className="brand-title display-font text-xl sm:text-2xl font-bold leading-tight">
                   {title}
                 </h1>
                 <p className="text-fg/50 text-xs sm:text-sm flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
@@ -117,7 +117,7 @@ export default function PortalApp({
                   <span className="mono-font tabular-nums hidden sm:inline">
                     {now ? now.toLocaleTimeString('en-IN') : ''}
                   </span>
-                  <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-green-500/15 text-green-600 text-[11px] font-semibold">
+                  <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-accent-soft text-accent text-[11px] font-semibold">
                     {client.company ? 'Company' : 'Client'}
                   </span>
                 </p>

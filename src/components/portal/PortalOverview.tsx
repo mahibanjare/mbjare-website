@@ -14,8 +14,8 @@ function fmt(d: string) {
 }
 
 const dotColor: Record<string, string> = {
-  Open: 'bg-amber-500',
-  'In Progress': 'bg-blue-500',
+  Open: 'bg-gold',
+  'In Progress': 'bg-accent',
   Resolved: 'bg-green-500',
 }
 
@@ -30,20 +30,20 @@ function AreaChart({ data }: { data: number[] }) {
   const line = pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ')
   const area = `${line} L${(pad + (data.length - 1) * step).toFixed(1)} ${H - pad} L${pad} ${H - pad} Z`
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full h-36">
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="w-full h-36 text-accent">
       <defs>
         <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(37,99,235)" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="rgb(37,99,235)" stopOpacity="0" />
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.26" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
         </linearGradient>
       </defs>
       {[0.25, 0.5, 0.75].map((g) => (
         <line key={g} x1={pad} x2={W - pad} y1={pad + g * (H - pad * 2)} y2={pad + g * (H - pad * 2)} stroke="currentColor" className="text-fg/10" strokeDasharray="3 4" />
       ))}
       <path d={area} fill="url(#areaFill)" />
-      <path d={line} fill="none" stroke="rgb(79,70,229)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={line} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       {pts.map((p, i) => (
-        <circle key={i} cx={p[0]} cy={p[1]} r="2.5" fill="rgb(79,70,229)" />
+        <circle key={i} cx={p[0]} cy={p[1]} r="2.5" fill="currentColor" />
       ))}
     </svg>
   )
@@ -97,9 +97,9 @@ export default function PortalOverview({
   }, [filtered, mounted])
 
   const cards = [
-    { label: 'Total Tickets', value: total, icon: Users2, grad: 'from-blue-500 to-blue-600', up: true },
-    { label: 'Resolved', value: resolved, icon: CheckCircle2, grad: 'from-emerald-500 to-green-600', up: true },
-    { label: 'Pending Issues', value: pending, icon: AlertTriangle, grad: 'from-rose-500 to-red-600', up: pending === 0 },
+    { label: 'Total Tickets', value: total, icon: Users2, cls: 'brand-icon', up: true },
+    { label: 'Resolved', value: resolved, icon: CheckCircle2, cls: 'bg-gradient-to-br from-emerald-500 to-green-600', up: true },
+    { label: 'Pending Issues', value: pending, icon: AlertTriangle, cls: 'bg-gradient-to-br from-[var(--gold-b)] to-[var(--gold)]', up: pending === 0 },
   ]
 
   const R = 34
@@ -135,7 +135,7 @@ export default function PortalOverview({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mb-6">
         {cards.map((s) => (
           <div key={s.label} className="glass-card p-5 sm:p-6 relative">
-            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.grad} flex items-center justify-center text-white shadow-lg mb-4`}>
+            <div className={`w-12 h-12 rounded-2xl ${s.cls} flex items-center justify-center text-white shadow-lg mb-4`}>
               <s.icon size={22} />
             </div>
             <div className="absolute top-6 right-6">
@@ -184,7 +184,7 @@ export default function PortalOverview({
             <h2 className="display-font text-lg font-semibold text-fg mb-2">Resolution Status</h2>
             <ul className="space-y-1.5 text-sm">
               <li className="flex items-center gap-2 text-fg/60"><span className="w-2.5 h-2.5 rounded-full bg-green-500" /> Resolved <span className="ml-auto font-semibold text-fg">{resolved}</span></li>
-              <li className="flex items-center gap-2 text-fg/60"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Pending <span className="ml-auto font-semibold text-fg">{pending}</span></li>
+              <li className="flex items-center gap-2 text-fg/60"><span className="w-2.5 h-2.5 rounded-full bg-gold" /> Pending <span className="ml-auto font-semibold text-fg">{pending}</span></li>
             </ul>
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function PortalOverview({
         <div className="flex items-center justify-between mb-4">
           <h2 className="display-font text-lg font-semibold text-fg">Recent activity</h2>
           {total > 0 && (
-            <button type="button" onClick={onViewTickets} className="text-xs text-blue-600 hover:text-fg transition-colors inline-flex items-center gap-1 font-medium">
+            <button type="button" onClick={onViewTickets} className="text-xs text-accent hover:text-fg transition-colors inline-flex items-center gap-1 font-medium">
               View all <ArrowRight size={12} />
             </button>
           )}
@@ -215,7 +215,7 @@ export default function PortalOverview({
                 <button type="button" onClick={onViewTickets} className="w-full text-left py-3 flex items-center gap-3 group">
                   <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dotColor[t.status] ?? 'bg-fg/30'}`} />
                   <div className="min-w-0 flex-1">
-                    <p className="text-fg text-sm font-medium truncate group-hover:text-blue-600 transition-colors">{t.subject}</p>
+                    <p className="text-fg text-sm font-medium truncate group-hover:text-accent transition-colors">{t.subject}</p>
                     <span className="mono-font text-[10px] text-fg/35">#{t.ticket_no} · {fmt(t.created_at)}</span>
                   </div>
                   <StatusBadge status={t.status} />
