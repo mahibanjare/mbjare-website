@@ -6,8 +6,7 @@ import { getClient, getMyTickets } from '@/app/portal/actions'
 import { getServices } from '@/lib/content'
 import { supabaseConfigured } from '@/lib/supabase'
 import ClientLogin from '@/components/portal/ClientLogin'
-import PortalDashboard from '@/components/portal/PortalDashboard'
-import PortalTopbar from '@/components/portal/PortalTopbar'
+import PortalApp from '@/components/portal/PortalApp'
 
 export const metadata: Metadata = {
   title: 'Client Portal — Support Tickets',
@@ -63,17 +62,9 @@ export default async function PortalPage() {
     )
   }
 
-  // ── Logged-in: portal app shell ────────────────────────────────────
+  // ── Logged-in: SaaS-style portal app ───────────────────────────────
   const [tickets, services] = await Promise.all([getMyTickets(), getServices()])
   const categories = ['General / Other', ...services.map((s) => s.title)]
 
-  return (
-    <main className="min-h-screen">
-      <PortalTopbar client={client} />
-      <div className="max-w-5xl mx-auto px-5 sm:px-6 py-8 sm:py-10">
-        {/* Sidebar tabs: Dashboard (overview) · My Tickets (table) · Raise Ticket (form) */}
-        <PortalDashboard client={client} tickets={tickets} categories={categories} />
-      </div>
-    </main>
-  )
+  return <PortalApp client={client} tickets={tickets} categories={categories} />
 }
