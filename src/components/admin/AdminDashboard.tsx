@@ -86,10 +86,88 @@ async function prepareImage(file: File): Promise<File> {
   throw new Error('Image bahut badi hai — 4 MB se chhoti image use karo')
 }
 
+const LOGO_MAX_EDGE = 1200
+
+/**
+ * Logo cleanup: makes the plain background around the logo transparent
+ * (flood fill from the edges, so white areas *inside* the logo stay) and
+ * trims the empty space, returning a tight transparent PNG.
+ */
+async function makeTransparentLogo(file: File): Promise<File> {
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif') return file
+  const bitmap = await createImageBitmap(file)
+  const scale = Math.min(1, LOGO_MAX_EDGE / Math.max(bitmap.width, bitmap.height))
+  const w = Math.round(bitmap.width * scale)
+  const h = Math.round(bitmap.height * scale)
+  const canvas = document.createElement('canvas')
+  canvas.width = w
+  canvas.height = h
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })!
+  ctx.imageSmoothingQuality = 'high'
+  ctx.drawImage(bitmap, 0, 0, w, h)
+  bitmap.close()
+  const img = ctx.getImageData(0, 0, w, h)
+  const d = img.data
+
+  // Background colour = average of the four corners (skip if already transparent)
+  const corners = [0, w - 1, (h - 1) * w, h * w - 1]
+  if (corners.some((i) => d[i * 4 + 3] < 250)) return file
+  const bg = [0, 1, 2].map((c) => corners.reduce((n, i) => n + d[i * 4 + c], 0) / 4)
+  const dist = (i: number) =>
+    Math.max(Math.abs(d[i * 4] - bg[0]), Math.abs(d[i * 4 + 1] - bg[1]), Math.abs(d[i * 4 + 2] - bg[2]))
+
+  const HARD = 28 // closer than this → fully transparent
+  const SOFT = 70 // up to this → partially transparent (smooth edges)
+  const seen = new Uint8Array(w * h)
+  const stack: number[] = []
+  for (let x = 0; x < w; x++) stack.push(x, (h - 1) * w + x)
+  for (let y = 0; y < h; y++) stack.push(y * w, y * w + w - 1)
+  while (stack.length) {
+    const i = stack.pop()!
+    if (seen[i]) continue
+    seen[i] = 1
+    const dd = dist(i)
+    if (dd >= SOFT) continue
+    d[i * 4 + 3] = dd <= HARD ? 0 : Math.round((255 * (dd - HARD)) / (SOFT - HARD))
+    if (dd > HARD) continue // edge pixel: keep it, don't spread past it
+    const x = i % w
+    if (x > 0) stack.push(i - 1)
+    if (x < w - 1) stack.push(i + 1)
+    if (i >= w) stack.push(i - w)
+    if (i < w * (h - 1)) stack.push(i + w)
+  }
+
+  // Trim to the visible logo + a small margin
+  let minX = w, minY = h, maxX = -1, maxY = -1
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++)
+      if (d[(y * w + x) * 4 + 3] > 16) {
+        if (x < minX) minX = x
+        if (x > maxX) maxX = x
+        if (y < minY) minY = y
+        if (y > maxY) maxY = y
+      }
+  if (maxX < 0) return file // nothing left — background detection failed
+  ctx.putImageData(img, 0, 0)
+  const pad = Math.round(Math.max(maxX - minX, maxY - minY) * 0.03)
+  minX = Math.max(0, minX - pad)
+  minY = Math.max(0, minY - pad)
+  maxX = Math.min(w - 1, maxX + pad)
+  maxY = Math.min(h - 1, maxY + pad)
+  const out = document.createElement('canvas')
+  out.width = maxX - minX + 1
+  out.height = maxY - minY + 1
+  out.getContext('2d')!.drawImage(canvas, minX, minY, out.width, out.height, 0, 0, out.width, out.height)
+  const blob = await new Promise<Blob | null>((r) => out.toBlob(r, 'image/png'))
+  if (!blob) return file
+  return new File([blob], file.name.replace(/\.[^.]+$/, '') + '-logo.png', { type: 'image/png' })
+}
+
 function ImageField({ field, initial }: { field: Field; initial: string }) {
   const [url, setUrl] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
+  const [clean, setClean] = useState(true)
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -100,7 +178,8 @@ function ImageField({ field, initial }: { field: Field; initial: string }) {
     let res: { url: string } | { error: string }
     try {
       const fd = new FormData()
-      fd.append('file', await prepareImage(file))
+      const src = field.transparent && clean ? await makeTransparentLogo(file) : file
+      fd.append('file', await prepareImage(src))
       res = await uploadImage(fd)
     } catch (e) {
       res = { error: (e as Error).message || 'Upload failed' }
@@ -126,10 +205,25 @@ function ImageField({ field, initial }: { field: Field; initial: string }) {
           <input type="file" accept="image/*" onChange={onFile} className="hidden" />
         </label>
       </div>
+      {field.transparent && (
+        <label className="mt-2 flex items-center gap-2 text-xs text-fg/60 cursor-pointer select-none">
+          <input type="checkbox" checked={clean} onChange={(e) => setClean(e.target.checked)} className="accent-[var(--accent)]" />
+          Upload pe background hatao + khaali jagah kaato
+        </label>
+      )}
       {err && <p className="text-red-600 text-xs mt-2">{err}</p>}
       {url && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt="Preview" className="mt-3 h-20 rounded-lg border border-fg/10 object-cover" />
+        <img
+          src={url}
+          alt="Preview"
+          className={`mt-3 h-20 rounded-lg border border-fg/10 ${field.transparent ? 'object-contain p-1.5' : 'object-cover'}`}
+          style={
+            field.transparent
+              ? { background: 'repeating-conic-gradient(#d4d4d4 0 25%, #fff 0 50%) 0 0 / 14px 14px' }
+              : undefined
+          }
+        />
       )}
     </div>
   )

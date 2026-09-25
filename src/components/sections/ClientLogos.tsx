@@ -4,18 +4,17 @@ import { getClientLogos } from '@/lib/content'
 
 function Item({ c }: { c: ClientLogo }) {
   const inner = c.logo ? (
-    // Uploaded logos are mostly square with a light background and built-in padding,
-    // so show them on a white tile and zoom in slightly to trim that padding
-    <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-white overflow-hidden border border-fg/[0.08] shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover/logo:scale-105">
+    <span className="logo-chip block">
       <Image
         src={c.logo}
         alt={c.name}
-        fill
+        width={480}
+        height={240}
         quality={90}
-        sizes="(max-width: 768px) 112px, 144px"
-        className="object-contain scale-[1.12]"
+        sizes="240px"
+        className="h-20 md:h-24 w-auto max-w-[180px] md:max-w-[240px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
       />
-    </div>
+    </span>
   ) : (
     <span className="display-font text-lg md:text-xl font-semibold text-fg/35 whitespace-nowrap transition-colors group-hover/logo:text-fg">
       {c.name}
@@ -39,10 +38,20 @@ export default async function ClientLogos({ className = '' }: { className?: stri
   const logos = await getClientLogos()
   if (logos.length === 0) return null
 
-  // Repeat short lists so one half of the track is wider than the screen
-  const base: ClientLogo[] = []
-  while (base.length < 10) base.push(...logos)
-  const duration = Math.max(24, base.length * 4)
+  const duration = Math.max(20, logos.length * 5)
+
+  // Two identical groups, each at least a full screen wide: the loop is seamless
+  // and a logo never shows up twice on screen at the same time.
+  const group = (hidden: boolean) => (
+    <div
+      aria-hidden={hidden || undefined}
+      className="flex shrink-0 min-w-[100vw] items-center justify-around gap-10 md:gap-16 px-5 md:px-8"
+    >
+      {logos.map((c, i) => (
+        <Item key={i} c={c} />
+      ))}
+    </div>
+  )
 
   return (
     <section aria-label="Our clients" className={`py-8 overflow-hidden ${className}`}>
@@ -50,13 +59,9 @@ export default async function ClientLogos({ className = '' }: { className?: stri
         Trusted by growing businesses
       </p>
       <div className="marquee-mask overflow-hidden">
-        <div
-          className="marquee-track marquee-reverse items-center gap-6 md:gap-10 pr-6 md:pr-10 py-3"
-          style={{ animationDuration: `${duration}s` }}
-        >
-          {[...base, ...base].map((c, i) => (
-            <Item key={i} c={c} />
-          ))}
+        <div className="marquee-track marquee-reverse py-2" style={{ animationDuration: `${duration}s` }}>
+          {group(false)}
+          {group(true)}
         </div>
       </div>
     </section>

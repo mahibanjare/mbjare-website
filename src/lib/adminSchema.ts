@@ -10,6 +10,8 @@ export interface Field {
   /** When set, this field edits parent[subKey] inside a jsonb column instead of a top-level column */
   parent?: string
   subKey?: string
+  /** Image fields: offer to remove the plain background + trim empty space on upload (logos) */
+  transparent?: boolean
 }
 
 export interface Collection {
@@ -93,7 +95,7 @@ export const collections: Collection[] = [
       sort,
       { key: 'name', label: 'Client / brand ka naam', type: 'text' },
       { key: 'url', label: 'Website URL (optional — logo pe click)', type: 'text' },
-      { key: 'logo', label: 'Logo (PNG/SVG, transparent background best)', type: 'image' },
+      { key: 'logo', label: 'Logo (background apne-aap hat jayega)', type: 'image', transparent: true },
     ],
   },
   {

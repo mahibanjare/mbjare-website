@@ -476,6 +476,13 @@ h1, h2, h3 {
   .marquee-track { animation-play-state: paused; }
 }
 
+/* Client logos: on dark, transparent logos sit on a soft light chip so dark marks stay readable */
+[data-theme="dark"] .logo-chip {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 14px;
+  padding: 6px 10px;
+}
+
 /* ── Spotlight cards (cursor-tracking glow) ─────────────────── */
 .spotlight-card {
   position: relative;
