@@ -10,7 +10,7 @@ function Item({ c }: { c: ClientLogo }) {
       width={180}
       height={56}
       quality={90}
-      className="h-10 md:h-12 w-auto max-w-[160px] object-contain grayscale opacity-60 transition-all duration-300 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
+      className="h-10 md:h-12 w-auto max-w-[160px] object-contain transition-transform duration-300 group-hover/logo:scale-105"
     />
   ) : (
     <span className="display-font text-lg md:text-xl font-semibold text-fg/35 whitespace-nowrap transition-colors group-hover/logo:text-fg">
