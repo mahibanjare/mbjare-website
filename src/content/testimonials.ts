@@ -26,12 +26,6 @@ export const testimonials: Testimonial[] = [
     msg: 'The brand refresh transformed how the salon looks online — a fresh logo, a website I am proud of, and social media that finally matches our new identity.',
     rating: 5,
   },
-  {
-    name: 'Grafiya',
-    role: 'Brand Identity · Website',
-    msg: 'From a blank page to a complete brand — original logo and a website that puts our identity front and centre. Exactly what we needed to launch with confidence.',
-    rating: 5,
-  },
 ]
 
 export const stats: Stat[] = [

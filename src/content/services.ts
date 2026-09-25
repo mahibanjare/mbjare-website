@@ -65,7 +65,7 @@ export const services: Service[] = [
     icon: 'Palette',
     title: 'Branding & Logo Design',
     subtitle: 'New Logo. Or a Redesign. Done Right.',
-    desc: 'Logo design or redesign, brand kits, UI/UX & marketing assets that make you look like a ₹1Cr company. We rebuilt Ankita Beauty Salon and built Grafiya from scratch.',
+    desc: 'Logo design or redesign, brand kits, UI/UX & marketing assets that make you look like a ₹1Cr company. We rebuilt the Ankita Beauty Salon brand from the ground up.',
     image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=900&q=80&auto=format&fit=crop',
     features: [
       'Logo design & redesigns',

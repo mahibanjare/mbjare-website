@@ -48,14 +48,4 @@ export const projects: Project[] = [
     year: '2025',
     image: '/projects/ankitabeautysalon.png',
   },
-  {
-    title: 'Grafiya',
-    url: 'https://grafiya.in',
-    category: 'Branding',
-    desc: 'Brand identity built from scratch — original logo design and a website that puts the new brand front and center.',
-    deliverables: ['Logo design', 'Website design & development'],
-    tags: ['Branding', 'Web'],
-    year: '2025',
-    image: '/projects/grafiya.png',
-  },
 ]

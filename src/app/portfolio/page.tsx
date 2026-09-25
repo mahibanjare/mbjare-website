@@ -9,7 +9,7 @@ import { FadeUp } from '@/components/motion'
 export const metadata: Metadata = {
   title: 'Portfolio — Real Client Work',
   description:
-    'Live client websites, brand identities and ad campaigns: Dharshakti Sweets & Restaurant, SR Petrochemicals, Bright Public School Godhi, Ankita Beauty Salon, Grafiya and more.',
+    'Live client websites, brand identities and ad campaigns: Hotel Kunwar Shree, Dharshakti Sweets & Restaurant, SR Petrochemicals, Bright Public School Godhi, Ankita Beauty Salon and more.',
   alternates: { canonical: '/portfolio' },
 }
 

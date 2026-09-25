@@ -49,7 +49,7 @@ const proof = [
   { title: 'SR Petrochemicals', tag: 'Corporate Website · SEO', img: '/projects/srpetrochemicals.png' },
   { title: 'Bright Public School Godhi', tag: 'Web · Social · Meta Ads', img: '/projects/bpsgodhi.png' },
   { title: 'Ankita Beauty Salon', tag: 'Branding · Web · Social', img: '/projects/ankitabeautysalon.png' },
-  { title: 'Grafiya', tag: 'Brand Identity · Website', img: '/projects/grafiya.png' },
+  { title: 'Hotel Kunwar Shree', tag: 'Hotel Website · QR Menu', img: '/projects/hotelkunwarshree.png' },
 ]
 
 const problems: { icon: typeof Search; title: Bi; desc: Bi }[] = [

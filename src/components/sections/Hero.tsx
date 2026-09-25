@@ -8,7 +8,7 @@ const trustedBy = [
   { name: 'SR Petrochemicals', url: 'https://srpetrochemicals.in' },
   { name: 'Bright Public School Godhi', url: 'https://bpsgodhi.in' },
   { name: 'Ankita Beauty Salon', url: 'https://ankitabeautysalonarang.in' },
-  { name: 'Grafiya', url: 'https://grafiya.in' },
+  { name: 'Hotel Kunwar Shree', url: 'https://www.hotelkunwarshree.com' },
 ]
 
 export default function Hero() {
