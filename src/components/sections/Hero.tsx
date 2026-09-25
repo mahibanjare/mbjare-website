@@ -61,14 +61,18 @@ export default function Hero() {
           </div>
           <div className="shot-frame absolute -bottom-2 -left-4 sm:-left-8 w-[54%] float-b">
             <div className="shot-bar" aria-hidden><i /><i /><i /></div>
-            <Image
-              src="/projects/bpsgodhi.png"
-              alt="Bright Public School Godhi — live client website"
-              width={380}
-              height={238}
-              priority
-              className="rounded-md w-full h-auto"
-            />
+            {/* Screenshot is wider than 16:10 — crop it to match the frame */}
+            <div className="relative aspect-[16/10] rounded-md overflow-hidden">
+              <Image
+                src="/projects/hotelkunwarshree.png"
+                alt="Hotel Kunwar Shree — live client website"
+                fill
+                sizes="(max-width: 1024px) 54vw, 340px"
+                quality={90}
+                priority
+                className="object-cover"
+              />
+            </div>
           </div>
           <span className="absolute -top-3 right-5 mono-font text-[9px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-gold/50 text-gold bg-bg-2 shadow-sm">
             Live — dharshakti.in
