@@ -71,6 +71,14 @@ create table if not exists mbjare_faqs (
   a text not null default ''
 );
 
+create table if not exists mbjare_logos (
+  id uuid primary key default gen_random_uuid(),
+  sort int default 0,
+  name text not null,
+  logo text,
+  url text
+);
+
 -- Lock everything down: no public access. The site + admin panel use the
 -- service-role key server-side, which bypasses RLS.
 alter table mbjare_services enable row level security;
@@ -78,3 +86,4 @@ alter table mbjare_packages enable row level security;
 alter table mbjare_projects enable row level security;
 alter table mbjare_testimonials enable row level security;
 alter table mbjare_faqs enable row level security;
+alter table mbjare_logos enable row level security;

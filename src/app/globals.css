@@ -463,6 +463,18 @@ h1, h2, h3 {
 .marquee-track:hover {
   animation-play-state: paused;
 }
+/* Left → right */
+.marquee-reverse {
+  animation-direction: reverse;
+}
+/* Soft fade at both edges of a marquee */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation-play-state: paused; }
+}
 
 /* ── Spotlight cards (cursor-tracking glow) ─────────────────── */
 .spotlight-card {

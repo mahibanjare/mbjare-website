@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import Hero from '@/components/sections/Hero'
+import ClientLogos from '@/components/sections/ClientLogos'
 import PackagesSection from '@/components/sections/PackagesSection'
 import StatsSection from '@/components/sections/StatsSection'
 import WhyUs from '@/components/sections/WhyUs'
@@ -20,6 +21,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+
+      <ClientLogos className="border-b border-fg/[0.08]" />
 
       {/* Editorial ticker */}
       <div className="py-5 border-b border-fg/[0.08] overflow-hidden">

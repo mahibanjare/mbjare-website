@@ -76,6 +76,25 @@ export async function sbInsert<T>(
   return { data: rows[0] }
 }
 
+/** Insert several rows in one request (every row must have the same keys). */
+export async function sbInsertMany(
+  table: string,
+  rows: Record<string, unknown>[],
+): Promise<string | null> {
+  if (!supabaseConfigured) return 'Supabase is not configured'
+  if (rows.length === 0) return null
+  const res = await fetch(`${url}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: { ...headers(), Prefer: 'return=minimal' },
+    body: JSON.stringify(rows),
+    cache: 'no-store',
+  })
+  if (res.ok) return null
+  const body = (await res.text()).slice(0, 200)
+  const hint = res.status === 401 || body.includes('row-level security') ? KEY_HINT : ''
+  return `Import failed (${res.status}): ${body}${hint}`
+}
+
 /** Update rows where id = value with the given patch. */
 export async function sbUpdate(
   table: string,

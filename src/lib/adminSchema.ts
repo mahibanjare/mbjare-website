@@ -86,6 +86,17 @@ export const collections: Collection[] = [
     ],
   },
   {
+    table: 'mbjare_logos',
+    title: 'Client Logos',
+    labelField: 'name',
+    fields: [
+      sort,
+      { key: 'name', label: 'Client / brand ka naam', type: 'text' },
+      { key: 'url', label: 'Website URL (optional — logo pe click)', type: 'text' },
+      { key: 'logo', label: 'Logo (PNG/SVG, transparent background best)', type: 'image' },
+    ],
+  },
+  {
     table: 'mbjare_testimonials',
     title: 'Testimonials',
     labelField: 'name',

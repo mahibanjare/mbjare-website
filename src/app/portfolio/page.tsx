@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
 import { getProjects } from '@/lib/content'
 import CTA from '@/components/sections/CTA'
+import ClientLogos from '@/components/sections/ClientLogos'
 import { FadeUp } from '@/components/motion'
 
 export const metadata: Metadata = {
@@ -31,6 +32,8 @@ export default async function PortfolioPage() {
         </div>
       </section>
 
+      <ClientLogos className="mb-12 border-y border-fg/[0.08]" />
+
       <section className="pb-24">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-6">
           {projects.map((p, i) => (
@@ -48,7 +51,8 @@ export default async function PortfolioPage() {
                       src={p.image}
                       alt={`${p.title} — live website`}
                       fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      quality={90}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 640px"
                       className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.05]"
                     />
                   </div>

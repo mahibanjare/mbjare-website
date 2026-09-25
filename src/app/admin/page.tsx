@@ -7,6 +7,7 @@ import { collections } from '@/lib/adminSchema'
 import { sbSelectAdmin, supabaseConfigured } from '@/lib/supabase'
 import LoginForm from '@/components/admin/LoginForm'
 import AdminDashboard from '@/components/admin/AdminDashboard'
+import { missingDefaultLabels } from '@/lib/contentSeed'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -68,7 +69,7 @@ export default async function AdminPage() {
     }),
   )
 
-  return <AdminDashboard collections={collections} data={data} />
+  return <AdminDashboard collections={collections} data={data} missingDefaults={missingDefaultLabels(data)} />
 }
 
 function AuthShell({ heading, children }: { heading: string; children: React.ReactNode }) {

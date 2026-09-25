@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Plus, Pencil, Trash2, X, Upload, Search, Check, LogOut, ShieldCheck,
-  Globe, Package, Briefcase, Star, HelpCircle, Users, LifeBuoy, type LucideIcon,
+  Globe, Package, Briefcase, Star, HelpCircle, Users, LifeBuoy, RotateCcw, Building2, type LucideIcon,
 } from 'lucide-react'
-import { saveRow, deleteRow, logout, uploadImage } from '@/app/admin/actions'
+import { saveRow, deleteRow, logout, uploadImage, importDefaults } from '@/app/admin/actions'
 import type { Collection, Field } from '@/lib/adminSchema'
 
 type Row = Record<string, unknown> & { id?: string }
@@ -15,6 +15,7 @@ const COLLECTION_ICON: Record<string, LucideIcon> = {
   mbjare_services: Globe,
   mbjare_packages: Package,
   mbjare_projects: Briefcase,
+  mbjare_logos: Building2,
   mbjare_testimonials: Star,
   mbjare_faqs: HelpCircle,
   mbjare_clients: Users,
@@ -56,6 +57,35 @@ function fromInput(field: Field, raw: string): unknown {
   return v || null
 }
 
+/** Above this size the upload is re-encoded — Vercel rejects request bodies over ~4.5 MB. */
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024
+const MAX_EDGE = 2880
+
+/**
+ * Keeps the original file untouched when it already fits (full quality).
+ * Only oversized images are downscaled to MAX_EDGE px and saved as
+ * high-quality WebP, which stays sharp for website screenshots.
+ */
+async function prepareImage(file: File): Promise<File> {
+  if (file.size <= MAX_UPLOAD_BYTES || file.type === 'image/gif' || file.type === 'image/svg+xml') return file
+  const bitmap = await createImageBitmap(file)
+  const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height))
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.round(bitmap.width * scale)
+  canvas.height = Math.round(bitmap.height * scale)
+  const ctx = canvas.getContext('2d')!
+  ctx.imageSmoothingQuality = 'high'
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+  bitmap.close()
+  for (const q of [0.95, 0.9, 0.85]) {
+    const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/webp', q))
+    if (blob && blob.size <= MAX_UPLOAD_BYTES) {
+      return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' })
+    }
+  }
+  throw new Error('Image bahut badi hai — 4 MB se chhoti image use karo')
+}
+
 function ImageField({ field, initial }: { field: Field; initial: string }) {
   const [url, setUrl] = useState(initial)
   const [busy, setBusy] = useState(false)
@@ -67,9 +97,14 @@ function ImageField({ field, initial }: { field: Field; initial: string }) {
     if (!file) return
     setErr('')
     setBusy(true)
-    const fd = new FormData()
-    fd.append('file', file)
-    const res = await uploadImage(fd)
+    let res: { url: string } | { error: string }
+    try {
+      const fd = new FormData()
+      fd.append('file', await prepareImage(file))
+      res = await uploadImage(fd)
+    } catch (e) {
+      res = { error: (e as Error).message || 'Upload failed' }
+    }
     setBusy(false)
     if ('error' in res) setErr(res.error)
     else setUrl(res.url)
@@ -103,9 +138,12 @@ function ImageField({ field, initial }: { field: Field; initial: string }) {
 export default function AdminDashboard({
   collections,
   data,
+  missingDefaults = {},
 }: {
   collections: Collection[]
   data: Record<string, Row[]>
+  /** Per table: built-in entries not yet in the table (shown on site only while table is empty) */
+  missingDefaults?: Record<string, string[]>
 }) {
   const router = useRouter()
   const [active, setActive] = useState(collections[0].table)
@@ -159,6 +197,21 @@ export default function AdminDashboard({
       if (err) setStatus(err)
       else {
         setEditing(null)
+        setStatus('saved')
+        router.refresh()
+        setTimeout(() => setStatus(''), 2500)
+      }
+    })
+  }
+
+  const missing = missingDefaults[active] ?? []
+
+  const restoreDefaults = () => {
+    setStatus('')
+    startTransition(async () => {
+      const err = await importDefaults(active)
+      if (err) setStatus(err)
+      else {
         setStatus('saved')
         router.refresh()
         setTimeout(() => setStatus(''), 2500)
@@ -283,6 +336,30 @@ export default function AdminDashboard({
           </div>
 
           {status && status !== 'saved' && <p className="text-sm mb-4 text-red-600">{status}</p>}
+
+          {missing.length > 0 && (
+            <div className="glass-card p-4 sm:p-5 mb-5 flex flex-col sm:flex-row sm:items-center gap-4 border-gold/40">
+              <div className="flex-1 min-w-0">
+                <p className="text-fg text-sm font-semibold">
+                  {missing.length} purani {col.title.toLowerCase()} entr{missing.length > 1 ? 'ies' : 'y'} admin list me nahi hai
+                </p>
+                <p className="text-fg/50 text-xs mt-1 leading-relaxed line-clamp-3">
+                  {missing.join(' · ')}.{' '}
+                  {rows.length > 0
+                    ? 'Ye abhi website par nahi dikh rahi — “Wapas lao” dabao, sab nayi entries ke saath dikhengi.'
+                    : 'Pehli entry add karte hi ye apne-aap yahan aa jayengi — ya abhi import karke edit karo.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={restoreDefaults}
+                disabled={pending}
+                className="btn-primary !py-2 !px-4 text-sm shrink-0 disabled:opacity-50"
+              >
+                <RotateCcw size={14} /> {pending ? 'Importing…' : 'Wapas lao'}
+              </button>
+            </div>
+          )}
 
           {/* Rows */}
           {shown.length === 0 ? (

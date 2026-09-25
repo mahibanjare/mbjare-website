@@ -69,6 +69,13 @@ export interface Project {
   image?: string
 }
 
+export interface ClientLogo {
+  name: string
+  /** Logo image URL (upload from /admin). Without it the name is shown as text. */
+  logo?: string | null
+  url?: string | null
+}
+
 export interface Testimonial {
   name: string
   role: string

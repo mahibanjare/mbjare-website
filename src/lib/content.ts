@@ -3,7 +3,7 @@
  * falls back to the checked-in content files so the site never breaks.
  * Edit content at /admin once Supabase env vars are set.
  */
-import type { Service, GrowthPackage, Project, Testimonial } from '@/types/content'
+import type { Service, GrowthPackage, Project, Testimonial, ClientLogo } from '@/types/content'
 import { sbSelect } from '@/lib/supabase'
 import { services as localServices } from '@/content/services'
 import { packages as localPackages } from '@/content/packages'
@@ -45,4 +45,11 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
 export async function getFaqs(): Promise<Faq[]> {
   return (await sbSelect<Faq>('mbjare_faqs')) ?? [...localFaqs]
+}
+
+/** Client logo strip — admin uploads; until then, client names from the portfolio. */
+export async function getClientLogos(): Promise<ClientLogo[]> {
+  const rows = await sbSelect<ClientLogo>('mbjare_logos')
+  if (rows) return rows
+  return (await getProjects()).map((p) => ({ name: p.title, url: p.url }))
 }

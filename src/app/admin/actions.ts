@@ -4,8 +4,9 @@ import { createHash } from 'node:crypto'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { revalidateTag } from 'next/cache'
-import { sbUpsert, sbDelete, sbUploadImage } from '@/lib/supabase'
+import { sbUpsert, sbDelete, sbUploadImage, sbSelectAdmin, sbInsertMany } from '@/lib/supabase'
 import { tableWhitelist } from '@/lib/adminSchema'
+import { missingDefaults, seedTables } from '@/lib/contentSeed'
 
 const COOKIE = 'mb_admin'
 
@@ -46,7 +47,26 @@ export async function logout() {
 export async function saveRow(table: string, row: Record<string, unknown>): Promise<string | null> {
   if (!(await isAdmin())) return 'Not authorized'
   if (!tableWhitelist.includes(table)) return 'Unknown collection'
+  // First entry in a seeded table: copy the built-in entries in too, so they stay on the site
+  if (seedTables.includes(table) && !row.id) {
+    const existing = await sbSelectAdmin<Record<string, unknown>>(table)
+    if (existing && existing.length === 0) {
+      const seedErr = await sbInsertMany(table, missingDefaults(table, []))
+      if (seedErr) return seedErr
+    }
+  }
   const err = await sbUpsert(table, row)
+  if (!err) revalidateTag('content', 'max')
+  return err
+}
+
+/** Copy built-in entries (portfolio / testimonials / FAQs) missing from the table back in. */
+export async function importDefaults(table: string): Promise<string | null> {
+  if (!(await isAdmin())) return 'Not authorized'
+  if (!seedTables.includes(table)) return 'Unknown collection'
+  const existing = await sbSelectAdmin<Record<string, unknown>>(table)
+  if (!existing) return 'Table read nahi ho payi'
+  const err = await sbInsertMany(table, missingDefaults(table, existing))
   if (!err) revalidateTag('content', 'max')
   return err
 }
@@ -65,7 +85,7 @@ export async function uploadImage(
   if (!(await isAdmin())) return { error: 'Not authorized' }
   const file = formData.get('file')
   if (!(file instanceof File) || file.size === 0) return { error: 'Koi file select nahi hui' }
-  if (file.size > 8 * 1024 * 1024) return { error: 'File 8 MB se badi hai — chhoti image use karo' }
+  if (file.size > 4.5 * 1024 * 1024) return { error: 'File 4.5 MB se badi hai — chhoti image use karo' }
   if (!file.type.startsWith('image/')) return { error: 'Sirf image files upload ho sakti hain' }
   return sbUploadImage(file)
 }
