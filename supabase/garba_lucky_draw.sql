@@ -88,3 +88,76 @@ limit 1;
 
 -- Winner ko mark karne ke liye (ticket number badal kar chalayein):
 -- update public.garba_lucky_draw set status = 'won' where ticket = 'G12345';
+
+
+-- -----------------------------------------------------
+-- 8) TELEGRAM ALERT – har nayi entry Mahendra ko Telegram par
+--    (TaskJare bot: telegram_outbox → telegram-dispatch cron har minute bhejta hai)
+-- -----------------------------------------------------
+create or replace function public.garba_tg_esc(t text)
+returns text
+language sql
+immutable
+set search_path = ''
+as $$ select replace(replace(replace(coalesce(t, ''), '&', '&amp;'), '<', '&lt;'), '>', '&gt;') $$;
+
+create or replace function public.garba_notify_telegram()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_chat  text;
+  v_total bigint;
+  v_text  text;
+begin
+  -- Mahendra Banjare ki TaskJare profile; relink karne par naya chat id apne aap use hoga
+  select telegram_chat_id into v_chat
+  from public.profiles
+  where id = '08350930-f860-4a7e-9a1b-40ab0465c7e1';
+
+  if v_chat is null then
+    return new;  -- Telegram link nahi hai to entry fail nahi honi chahiye
+  end if;
+
+  select count(*) into v_total from public.garba_lucky_draw;
+
+  v_text := concat_ws(E'\n',
+    '🎉 <b>Garba Lucky Draw – nayi entry</b>',
+    '',
+    '🎟 Ticket: <b>' || public.garba_tg_esc(new.ticket) || '</b>',
+    '👤 ' || public.garba_tg_esc(new.name),
+    '📞 +91 ' || public.garba_tg_esc(new.mobile),
+    case when new.has_business
+      then '🏪 ' || public.garba_tg_esc(new.business_name) || ' (' || public.garba_tg_esc(new.business_type) || ')'
+      else '🙅 Business nahi hai'
+    end,
+    case when not new.has_business and (new.ref_name is not null or new.ref_mobile is not null)
+      then '🎁 Referral: ' || public.garba_tg_esc(coalesce(new.ref_name, '—'))
+           || coalesce(' · +91 ' || public.garba_tg_esc(new.ref_mobile), '')
+    end,
+    '📍 Source: ' || public.garba_tg_esc(coalesce(new.source, '—')),
+    '🕒 ' || to_char(new.created_at at time zone 'Asia/Kolkata', 'DD Mon, HH12:MI AM'),
+    '',
+    '📊 Total entries: <b>' || v_total || '</b>'
+  );
+
+  -- profile_id null rakha hai: delivery fail ho to dispatch Mahendra ka TaskJare link na hataye
+  insert into public.telegram_outbox (profile_id, chat_id, kind, payload)
+  values (null, v_chat, 'garba_entry', jsonb_build_object('text', v_text));
+
+  return new;
+exception when others then
+  -- Alert me koi gadbad ho to bhi user ki entry save honi chahiye
+  raise warning 'garba_notify_telegram failed: %', sqlerrm;
+  return new;
+end;
+$$;
+
+revoke all on function public.garba_notify_telegram() from public, anon, authenticated;
+
+drop trigger if exists garba_notify_telegram on public.garba_lucky_draw;
+create trigger garba_notify_telegram
+  after insert on public.garba_lucky_draw
+  for each row execute function public.garba_notify_telegram();
