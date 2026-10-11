@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
     // Admin image uploads go through a Server Action (default limit is 1 MB)
     serverActions: { bodySizeLimit: '5mb' },
   },
+  async rewrites() {
+    // Standalone campaign page (own styles + Supabase form), served from /public
+    return [{ source: '/garba', destination: '/garba.html' }];
+  },
   async redirects() {
     // Old standalone service pages merged into /services/business-automation
     const merged = [
