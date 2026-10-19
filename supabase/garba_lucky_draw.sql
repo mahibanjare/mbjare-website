@@ -161,3 +161,53 @@ drop trigger if exists garba_notify_telegram on public.garba_lucky_draw;
 create trigger garba_notify_telegram
   after insert on public.garba_lucky_draw
   for each row execute function public.garba_notify_telegram();
+
+
+-- -----------------------------------------------------
+-- 9) DRAW + PUBLIC RESULT (admin: /admin/garba, public: /garba/winner)
+--    Entries close 20 Oct 2026, 11:59 AM IST (enforced here too)
+-- -----------------------------------------------------
+create or replace function public.garba_draw_entries()
+returns table (ticket text, name text, business_name text)
+language sql stable security definer set search_path = ''
+as $$
+  select g.ticket, g.name, coalesce(g.business_name, g.ref_name, '')
+  from public.garba_lucky_draw g order by g.id
+$$;
+revoke all on function public.garba_draw_entries() from public;
+grant execute on function public.garba_draw_entries() to anon, authenticated;
+
+create table if not exists public.garba_draw_result (
+  id               int primary key default 1 check (id = 1),
+  winner_ticket    text not null,
+  winner_name      text not null,
+  winner_business  text,
+  seal_hash        text not null,
+  seal_reveal      text not null,   -- "ticket|name|business|salt"; sha256(seal_reveal) = seal_hash
+  total_entries    int  not null,
+  drawn_at         timestamptz not null default now()
+);
+alter table public.garba_draw_result enable row level security;  -- written only with the service-role key
+
+create or replace function public.garba_public_result()
+returns table (winner_ticket text, winner_name text, winner_business text, seal_hash text, seal_reveal text, total_entries int, drawn_at timestamptz)
+language sql stable security definer set search_path = ''
+as $$
+  select r.winner_ticket, r.winner_name, r.winner_business, r.seal_hash, r.seal_reveal, r.total_entries, r.drawn_at
+  from public.garba_draw_result r where r.id = 1
+$$;
+revoke all on function public.garba_public_result() from public;
+grant execute on function public.garba_public_result() to anon, authenticated;
+
+drop policy if exists "public can submit entry" on public.garba_lucky_draw;
+create policy "public can submit entry"
+  on public.garba_lucky_draw for insert
+  to anon, authenticated
+  with check (
+    consent = true
+    and created_at <= now() + interval '1 minute'
+    and now() <= timestamptz '2026-10-20 11:59:59+05:30'
+  );
+
+-- Re-draw karna ho (winner ne claim nahi kiya): public result hatane ke liye
+-- delete from public.garba_draw_result where id = 1;

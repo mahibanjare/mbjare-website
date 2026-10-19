@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Plus, Pencil, Trash2, X, Upload, Search, Check, LogOut, ShieldCheck,
-  Globe, Package, Briefcase, Star, HelpCircle, Users, LifeBuoy, RotateCcw, Building2, type LucideIcon,
+  Globe, Package, Briefcase, Star, HelpCircle, Users, LifeBuoy, RotateCcw, Building2, Sparkles, type LucideIcon,
 } from 'lucide-react'
 import { saveRow, deleteRow, logout, uploadImage, importDefaults } from '@/app/admin/actions'
 import type { Collection, Field } from '@/lib/adminSchema'
@@ -365,6 +365,13 @@ export default function AdminDashboard({
               </button>
             )
           })}
+          <a
+            href="/admin/garba"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all shrink-0 md:w-full md:mt-3 border border-gold/40 text-fg/80 hover:text-fg hover:bg-gold/10"
+          >
+            <Sparkles size={17} className="text-gold" />
+            गरबा Lucky Draw
+          </a>
         </nav>
       </aside>
 
