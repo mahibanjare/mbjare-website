@@ -72,9 +72,11 @@ h1 span{color:var(--gold)}
 .reveal .mono{font-family:var(--f-mono);font-size:12px;word-break:break-all;background:var(--deeper);border-radius:8px;padding:8px}
 .verdict{font-weight:700}.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}
 .list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;max-height:360px;overflow:auto}
-.list li{display:flex;gap:8px;align-items:center;background:var(--deeper);border-radius:9px;padding:6px 8px;font-size:14px;min-width:0}
-.list li .t{font-family:var(--f-mono);font-size:12px;color:#fff;border-radius:5px;padding:1px 6px;flex:none}
-.list li .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.list li{display:flex;gap:8px;align-items:flex-start;background:var(--deeper);border-radius:9px;padding:7px 8px;font-size:14px;line-height:1.25;min-width:0}
+.list li .t{font-family:var(--f-mono);font-size:12px;color:#fff;border-radius:5px;padding:1px 6px;flex:none;margin-top:1px}
+.list li .n{min-width:0;overflow-wrap:anywhere}
+.list li .n small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .list li.win{outline:2px solid var(--gold)}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .src{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -213,17 +215,40 @@ function draw(){
     var fs=Math.max(7,Math.min(W*0.034,seg*R*0.42));
     if(n>40){ctx.font="800 "+Math.min(fs*1.6,W*0.03)+"px 'Baloo 2',sans-serif";ctx.fillText(people[i].tok,R*0.93,0)}
     else{
-      ctx.font="800 "+(fs*1.05)+"px 'Baloo 2',sans-serif";ctx.fillText(people[i].tok,R*0.93,-fs*0.45);
-      ctx.font="600 "+(fs*0.82)+"px 'Hind',sans-serif";
-      var nm=people[i].biz||people[i].name,maxW=R*0.6;
-      while(ctx.measureText(nm).width>maxW&&nm.length>3)nm=nm.slice(0,-2)+"…";
-      ctx.fillText(nm,R*0.93,fs*0.55);
+      var lines=fitName(people[i].biz||people[i].name,fs,R*0.64,n<=30);
+      var top=-(fs*1.05+lines.lh*lines.text.length)/2+fs*0.5;
+      ctx.font="800 "+(fs*1.05)+"px 'Baloo 2',sans-serif";ctx.fillText(people[i].tok,R*0.93,top);
+      ctx.font="600 "+lines.size+"px 'Hind',sans-serif";
+      lines.text.forEach(function(t,k){ctx.fillText(t,R*0.93,top+fs*0.62+lines.lh*(k+0.5))});
     }
     ctx.restore();
   }
   var bulbs=Math.max(24,Math.min(n*2,96));
   for(var b=0;b<bulbs;b++){var a=b/bulbs*2*Math.PI;ctx.beginPath();ctx.arc(Math.cos(a)*(R-W*0.012),Math.sin(a)*(R-W*0.012),W*0.0065,0,7);ctx.fillStyle=(b+Math.floor(rot*3))%2?"#FFF6C8":"#F5B814";ctx.fill()}
   ctx.restore();
+}
+/* पूरा नाम दिखाने के लिए: पहले font छोटा करो, फिर भी न आए तो दो लाइन, आख़िर में ही "…" */
+function fitName(nm,fs,maxW,twoLines){
+  var font=function(s){ctx.font="600 "+s+"px 'Hind',sans-serif"};
+  var wide=function(t){return ctx.measureText(t).width>maxW};
+  var cut=function(t){while(wide(t)&&t.length>3)t=t.slice(0,-2)+"…";return t};
+  var size=fs*0.82;font(size);
+  while(wide(nm)&&size>fs*0.62){size*=0.95;font(size)}
+  if(!wide(nm))return {text:[nm],size:size,lh:size*1.1};
+  var words=nm.split(/\\s+/);
+  if(twoLines&&words.length>1){
+    var best=null;
+    for(var w=1;w<words.length;w++){
+      var a=words.slice(0,w).join(" "),b=words.slice(w).join(" ");
+      var m=Math.max(ctx.measureText(a).width,ctx.measureText(b).width);
+      if(!best||m<best.m)best={a:a,b:b,m:m};
+    }
+    size=fs*0.78;font(size);
+    while((wide(best.a)||wide(best.b))&&size>fs*0.5){size*=0.95;font(size)}
+    return {text:[cut(best.a),cut(best.b)],size:size,lh:size*1.05};
+  }
+  while(wide(nm)&&size>fs*0.45){size*=0.95;font(size)}
+  return {text:[cut(nm)],size:size,lh:size*1.1};
 }
 function underPointer(){var n=people.length,seg=2*Math.PI/n,a=(-Math.PI/2-rot)%(2*Math.PI);if(a<0)a+=2*Math.PI;return Math.floor(a/seg)%n}
 
@@ -294,7 +319,7 @@ async function publish(){
 /* ---------- सूची ---------- */
 function renderList(){
   $("cnt").textContent="("+people.length+")";
-  $("list").innerHTML=people.map(function(p,i){return '<li class="'+(i===lastWinner?"win":"")+'"><span class="t" style="background:'+COLORS[i%COLORS.length]+'">'+esc(p.tok)+'</span><span class="n" title="'+esc(p.name)+'">'+esc(p.biz||p.name)+'</span></li>'}).join("");
+  $("list").innerHTML=people.map(function(p,i){return '<li class="'+(i===lastWinner?"win":"")+'"><span class="t" style="background:'+COLORS[i%COLORS.length]+'">'+esc(p.tok)+'</span><span class="n">'+esc(p.biz||p.name)+(p.biz?'<small>'+esc(p.name)+'</small>':'')+'</span></li>'}).join("");
 }
 function setSrc(text,cls){var s=$("src");s.textContent=text;s.className="src "+(cls||"")}
 async function load(){
