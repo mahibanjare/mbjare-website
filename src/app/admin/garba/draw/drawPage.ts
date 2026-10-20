@@ -65,11 +65,8 @@ h1 span{color:var(--gold)}
 .card{background:var(--panel);border:1.5px solid var(--line);border-radius:18px;padding:16px}
 .card h2{font-family:var(--f-display);font-size:21px;margin:0 0 4px;color:var(--gold)}
 .card p{margin:0 0 10px;color:var(--muted);font-size:14px}
-.seal{border-color:var(--gold);background:linear-gradient(160deg,#16585A,var(--panel))}
 .code{font-family:var(--f-mono);font-size:clamp(18px,3.4vw,24px);letter-spacing:2px;color:#fff;background:var(--deeper);border:1.5px dashed var(--gold);border-radius:10px;padding:10px 12px;text-align:center;word-break:break-all}
 .lbl{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
-.reveal{display:flex;flex-direction:column;gap:8px;margin-top:12px;font-size:14px}
-.reveal .mono{font-family:var(--f-mono);font-size:12px;word-break:break-all;background:var(--deeper);border-radius:8px;padding:8px}
 .verdict{font-weight:700}.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}
 .list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;max-height:360px;overflow:auto}
 .list{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
@@ -132,18 +129,6 @@ h1 span{color:var(--gold)}
     </div>
 
     <div class="side">
-      <section class="card seal">
-        <h2>🔒 सीलबंद कोड</h2>
-        <p>Winner स्पिन से पहले ही गुप्त रूप से तय होकर इस कोड में सील हो चुका है। ड्रा से पहले इसकी फोटो ले लें। ड्रा के बाद साबित होगा कि नतीजा बदला नहीं गया।</p>
-        <div class="code" id="sealCode">…</div>
-        <div class="reveal" id="reveal" hidden>
-          <span class="lbl">सील खोलने की चाबी</span>
-          <div class="mono" id="revealText"></div>
-          <span class="lbl">इससे बना पूरा कोड (SHA-256)</span>
-          <div class="mono" id="revealHash"></div>
-          <div class="verdict" id="verdict"></div>
-        </div>
-      </section>
 
       <section class="card">
         <h2>Participants <span id="cnt"></span></h2>
@@ -165,7 +150,7 @@ h1 span{color:var(--gold)}
     <div class="biz" id="wBiz"></div>
     <div class="nm" id="wName"></div>
     <div class="row" style="justify-content:center">
-      <button class="btn" id="closeBtn" type="button">सील कोड जाँचें</button>
+      <button class="btn" id="closeBtn" type="button">बंद करें</button>
       <button class="btn" id="againBtn" type="button">🔁 नया ड्रा तैयार करें</button>
     </div>
     <div class="pub">
@@ -188,7 +173,7 @@ var $=function(id){return document.getElementById(id)};
 var cv=$("cv"), ctx=cv.getContext("2d");
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
 
-/* ---------- सील (commit–reveal) ---------- */
+/* ---------- winner पहले से गुप्त रूप से तय (commit–reveal); publish पर server इसे जाँचता है ---------- */
 function randInt(n){var a=new Uint32Array(1),lim=Math.floor(0xFFFFFFFF/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=lim);return a[0]%n}
 function randHex(bytes){var a=new Uint8Array(bytes);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(b){return b.toString(16).padStart(2,"0")}).join("")}
 async function sha(s){var h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.prototype.map.call(new Uint8Array(h),function(b){return b.toString(16).padStart(2,"0")}).join("")}
@@ -196,8 +181,6 @@ function commitStr(p,salt){return p.tok+"|"+p.name+"|"+(p.biz||"")+"|"+salt}
 async function newSeal(){
   var idx=randInt(people.length), salt=randHex(8), hash=await sha(commitStr(people[idx],salt));
   seal={idx:idx,salt:salt,hash:hash};
-  $("sealCode").textContent=hash.slice(0,16).toUpperCase().match(/.{4}/g).join(" ");
-  $("reveal").hidden=true;
 }
 
 /* ---------- पहिया ---------- */
@@ -282,23 +265,14 @@ async function start(){
   $("wTok").textContent=people[w].tok;$("wBiz").textContent=people[w].biz||people[w].name;$("wName").textContent=people[w].biz?people[w].name:"";
   $("pubBtn").hidden=false;$("pubBtn").disabled=false;$("pubErr").hidden=true;$("pubOk").classList.remove("show");
   $("modal").hidden=false;$("closeBtn").focus();
-  await showReveal();
-  $("hint").textContent="ड्रा पूरा हुआ। सील कोड जाँचकर सबको दिखाएँ, फिर Winner घोषित करें।";
+  $("hint").textContent="ड्रा पूरा हुआ। अब Winner घोषित करें।";
   spinning=false;
-}
-async function showReveal(){
-  var p=people[seal.idx],s=commitStr(p,seal.salt),h=await sha(s);
-  $("revealText").textContent=s;$("revealHash").textContent=h;
-  var ok=h===seal.hash&&seal.idx===lastWinner,v=$("verdict");
-  v.className="verdict "+(ok?"ok":"bad");
-  v.textContent=ok?"✓ कोड मेल खाता है: नतीजा ड्रा से पहले ही सील था, बीच में कुछ नहीं बदला।":"✗ कोड मेल नहीं खाता।";
-  $("reveal").hidden=false;
 }
 function lock(on){["startBtn","syncBtn"].forEach(function(id){$(id).disabled=on})}
 async function reset(){
   $("modal").hidden=true;lastWinner=-1;$("hubLbl").textContent="टाइमर";$("hubNum").textContent=SPIN_MS/1000;
   renderList();await newSeal();lock(false);
-  $("hint").textContent="नया सील कोड बन गया है। फोटो लें, फिर दर्शकों में से किसी से START दबवाएँ।";
+  $("hint").textContent="तैयार है। दर्शकों में से किसी से START दबवाएँ।";
 }
 
 /* ---------- Winner घोषित (public result page) ---------- */
@@ -342,7 +316,7 @@ async function load(){
 $("syncBtn").onclick=load;
 $("startBtn").onclick=start;
 $("pubBtn").onclick=publish;
-$("closeBtn").onclick=function(){$("modal").hidden=true;$("reveal").scrollIntoView({behavior:"smooth",block:"center"})};
+$("closeBtn").onclick=function(){$("modal").hidden=true};
 $("againBtn").onclick=reset;
 $("copyBtn").onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(RESULT_URL):Promise.reject()).then(function(){b.textContent="✓ Copied"},function(){b.textContent=RESULT_URL})};
 $("soundBtn").onclick=function(){sound=!sound;$("soundBtn").textContent=sound?"🔊 आवाज़ चालू":"🔇 आवाज़ बंद"};

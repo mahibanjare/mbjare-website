@@ -14,7 +14,6 @@ export async function GET() {
       timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
     })
 
-  const seal = result ? result.seal_hash.slice(0, 16).toUpperCase().match(/.{4}/g)!.join(' ') : ''
 
   const winnerBlock = result
     ? `<section class="win" aria-labelledby="wh">
@@ -26,17 +25,7 @@ export async function GET() {
         <p class="prize">इनाम: <b>3 Reels का FREE Mobile Shoot</b></p>
         <p class="when">Draw: ${esc(fmt(result.drawn_at))} · कुल ${result.total_entries} entries</p>
         <p class="claim">Winner 27 Oct तक 8815223300 पर call / WhatsApp करके इनाम claim करें।</p>
-      </section>
-      <details class="proof">
-        <summary>🔒 Draw ईमानदार था — सील कोड जाँचें</summary>
-        <p>स्पिन से पहले स्क्रीन पर यह सील कोड दिखाया गया था:</p>
-        <div class="code">${esc(seal)}</div>
-        <p>सील खोलने की चाबी (winner की जानकारी + गुप्त कोड):</p>
-        <div class="mono">${esc(result.seal_reveal)}</div>
-        <p>इसका SHA-256 कोड:</p>
-        <div class="mono" id="hash">${esc(result.seal_hash)}</div>
-        <p class="verdict" id="verdict">जाँच हो रही है…</p>
-      </details>`
+      </section>`
     : `<section class="wait">
         <div class="clock" aria-hidden="true">⏳</div>
         <h2>Winner <span>20 Oct (दशहरा), दोपहर ~3 बजे</span> घोषित होगा</h2>
@@ -95,13 +84,6 @@ ${result ? '' : '<meta http-equiv="refresh" content="60">'}
   .win .prize{margin-top:14px;background:var(--mint);border-radius:14px;padding:10px 12px 8px}
   .win .when{font-size:14px;color:var(--muted);margin-top:10px}
   .win .claim{font-size:13.5px;color:var(--muted);margin-top:4px}
-  .proof{margin-top:16px;text-align:left;border:2px dashed var(--line);border-radius:16px;padding:12px 14px;background:var(--paper)}
-  .proof summary{cursor:pointer;font-weight:700;color:var(--teal)}
-  .proof p{font-size:14px;color:var(--muted);margin-top:10px}
-  .proof .code{font-family:ui-monospace,Menlo,monospace;font-size:20px;letter-spacing:2px;text-align:center;border:1.5px dashed var(--gold);border-radius:10px;padding:8px;margin-top:6px;background:#fff}
-  .proof .mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;word-break:break-all;background:#fff;border-radius:8px;padding:8px;margin-top:6px}
-  .proof .verdict{font-weight:700}
-  .proof .ok{color:#1F8A55}.proof .bad{color:#C62853}
   .wait .clock{font-size:42px;line-height:1}
   .wait h2{font-family:'Baloo 2',sans-serif;font-size:26px;line-height:1.2;margin-top:8px}
   .wait h2 span{display:block;color:var(--magenta)}
@@ -151,22 +133,7 @@ ${result ? '' : '<meta http-equiv="refresh" content="60">'}
     Website · WhatsApp Automation · Social Media · Google Business
   </footer>
 </main>
-${
-  result
-    ? `<script>
-(async function(){
-  var v=document.getElementById('verdict');
-  try{
-    var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(${JSON.stringify(result.seal_reveal).replace(/</g, '\\u003c')}));
-    var h=[].map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0')}).join('');
-    var ok=h===${JSON.stringify(result.seal_hash)};
-    v.className='verdict '+(ok?'ok':'bad');
-    v.textContent=ok?'✓ कोड मेल खाता है: winner spin से पहले ही सील था, बाद में कुछ नहीं बदला।':'✗ कोड मेल नहीं खाता।';
-  }catch(e){v.textContent='इस browser में जाँच नहीं हो पाई।'}
-})();
-</script>`
-    : ''
-}
+
 </body>
 </html>`
 
